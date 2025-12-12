@@ -33,7 +33,7 @@ CREATE TABLE ratings (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_user_movie (user_id, movie_id)
+    UNIQUE KEY unique_user_movie (user_id, movie_id) -- user can rate a specific movie only once
 );
 
 
