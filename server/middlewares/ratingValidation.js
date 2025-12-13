@@ -37,20 +37,6 @@ const validateScore = (score, errors) => {
     if (scoreNum < ratingConstraints.SCORE.MIN || scoreNum > ratingConstraints.SCORE.MAX) {
         errors.push(`Score must be between ${ratingConstraints.SCORE.MIN} and ${ratingConstraints.SCORE.MAX}`);
     }
-
-    // Check the step constraint (0.1 increments)
-    if (!Number.isInteger(scoreNum * 10)) { // 7.1 true; 7.12 false
-        errors.push(`Score must be in increments of ${ratingConstraints.SCORE.STEP}`);
-    }
-
-    // Check decimal places
-    const scoreStr = scoreNum.toString();
-    if (scoreStr.includes('.')) {
-        const decimalPlaces = scoreStr.split('.')[1].length;
-        if (decimalPlaces > ratingConstraints.SCORE.DECIMAL_PLACES) {
-            errors.push(`Score must have at most ${ratingConstraints.SCORE.DECIMAL_PLACES} decimal place(s)`);
-        }
-    }
 }
 
 const validateComment = (comment, errors) => {
