@@ -4,7 +4,8 @@ import userConstraints from '../config/constraints/userConstraints.js'
 // MAIN VALIDATION FUNCTION
 // ============================================================================
 
-const validateUser = (user) => {
+const validateUser = (req, res, next) => {
+    const user = req.body;
     const errors = [];
 
     validateNickname(user.nickname, errors);
@@ -14,7 +15,14 @@ const validateUser = (user) => {
     validateDateOfBirth(user.date_of_birth, errors);
     validateBio(user.bio, errors);
 
-    return errors;
+    if (errors.length > 0) {
+        return res.status(400).json({
+            message: 'Validation failed',
+            errors: errors
+        });
+    }
+
+    next();
 }
 
 // ============================================================================

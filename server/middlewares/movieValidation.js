@@ -4,7 +4,8 @@ import movieConstraints from '../config/constraints/movieConstraints.js'
 // MAIN VALIDATION FUNCTION
 // ============================================================================
 
-const validateMovie = (movie) => {
+const validateMovie = (req, res, next) => {
+    const movie = req.body;
     const errors = [];
 
     validateTitle(movie.title, errors);
@@ -15,7 +16,14 @@ const validateMovie = (movie) => {
     validateRuntime(movie.runtime, errors);
     validatePosterUrl(movie.poster_url, errors);
 
-    return errors;
+    if (errors.length > 0) {
+        return res.status(400).json({
+            message: 'Validation failed',
+            errors: errors
+        });
+    }
+
+    next();
 }
 
 // ============================================================================

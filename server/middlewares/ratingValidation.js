@@ -4,13 +4,21 @@ import ratingConstraints from '../config/constraints/ratingConstraints.js'
 // MAIN VALIDATION FUNCTION
 // ============================================================================
 
-const validateRating = (rating) => {
+const validateRating = (req, res, next) => {
+    const rating = req.body;
     const errors = [];
 
     validateScore(rating.score, errors);
     validateComment(rating.comment, errors);
 
-    return errors;
+    if (errors.length > 0) {
+        return res.status(400).json({
+            message: 'Validation failed',
+            errors: errors
+        });
+    }
+
+    next();
 }
 
 // ============================================================================
