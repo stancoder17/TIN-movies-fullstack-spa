@@ -6,38 +6,38 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nickname VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255),
-    date_of_birth DATE,
-    date_of_joining DATETIME DEFAULT CURRENT_TIMESTAMP,
+    password_hash CHAR(64) NOT NULL, -- SHA256 hash
+    profile_picture_url VARCHAR(255),
+    date_of_birth DATE NOT NULL,
+    date_of_joining DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     bio TEXT
 );
 
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    description TEXT,
-    genre VARCHAR(100),
-    director VARCHAR(100),
-    release_date DATE,
-    runtime INT,
-    poster_url VARCHAR(500)
+    description TEXT NOT NULL,
+    genre VARCHAR(100) NOT NULL,
+    director VARCHAR(100) NOT NULL,
+    release_date DATE NOT NULL,
+    runtime INT NOT NULL,
+    poster_url VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE ratings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     movie_id INT NOT NULL,
-    score INT NOT NULL CHECK (score >= 1 AND score <= 10),
+    score DECIMAL(3,1) NOT NULL CHECK (score >= 1.0 AND score <= 10.0),
     comment TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
     UNIQUE KEY unique_user_movie (user_id, movie_id) -- user can rate a specific movie only once
 );
 
 
-INSERT INTO users (nickname, email, password_hash, profile_picture, date_of_birth, date_of_joining, bio) VALUES
+INSERT INTO users (nickname, email, password_hash, profile_picture_url, date_of_birth, date_of_joining, bio) VALUES
 ('dave_the_cinephile', 'dave.movies@example.com', '0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e', 'https://cdn.pfps.gg/pfps/9319-lego-star-wars-31.png', '1992-05-12', '2023-06-12', 'Cinema is not just entertainment, it is a way of life. Sci-fi geek and vinyl collector. Letterboxd veteran.'), -- password = password1
 ('SaraHJ', 'sarah.j@example.com', '6cf615d5bcaac778352a8f1f3360d23f02f34ec182e259897fd6ce485d7870d4', 'https://pics.craiyon.com/2023-10-27/51bd27e80c554b11af16a1660230a762.webp', '1998-11-23', '2024-10-03', 'Film studies student and thus coffee addict.'), -- password = password2
 ('TheGrumpyCritic', 'critical.mark@example.com', '5906ac361a137e2d286465cd6588ebb5ac3f5ae955001100bc41577c3d751764', 'https://cdn.pfps.gg/pfps/9038-funny-star-wars.png', '1985-03-30', '2020-01-20', 'Movies are the best, but most blockbusters are overrated'), -- password = password3
