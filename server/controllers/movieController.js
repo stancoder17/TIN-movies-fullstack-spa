@@ -43,7 +43,8 @@ const updateMovie = async (req, res) => {
     try {
         const id = req.params.id;
 
-        if (!getMovieById(id)) {
+        const existingMovie = await Movie.getById(id);
+        if (!existingMovie) {
             res.status(404).json({ message: `Movie with id ${id} not found` });
             return;
         }
@@ -62,8 +63,14 @@ const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id;
 
+        const existingMovie = await Movie.getById(id);
+        if (!existingMovie) {
+            res.status(404).json({ message: `Movie with id ${id} not found` });
+            return;
+        }
+
         await Movie.delete(id);
-        res.status(204).json();
+        res.status(204).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while deleting movie' });

@@ -59,8 +59,14 @@ const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
 
+        const existingUser = await User.getById(id);
+        if (!existingUser) {
+            res.status(404).json({ message: `User with id ${id} not found` });
+            return;
+        }
+
         await User.delete(id);
-        res.status(204).json();
+        res.status(204).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while deleting user' });
