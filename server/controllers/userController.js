@@ -42,7 +42,8 @@ const updateUser = async (req, res) => {
     try {
         const id = req.params.id;
 
-        if (!getUserById(id)) {
+        const existingUser = await User.getById(id);
+        if (!existingUser) {
             res.status(404).json({ message: `User with id ${id} not found` });
             return;
         }
@@ -74,4 +75,4 @@ const deleteUser = async (req, res) => {
 }
 
 
-export { getAllUsers, getUserById, createUser, updateUser };
+export { getAllUsers, getUserById, createUser, updateUser, deleteUser };

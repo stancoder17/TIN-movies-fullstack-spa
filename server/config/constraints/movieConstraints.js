@@ -1,39 +1,38 @@
-const MOVIE_CONSTRAINTS = {
-    TITLE: {
-        REQUIRED: true,
-        MIN_LENGTH: 3,
-        MAX_LENGTH: 255
+const movieConstraints = {
+    title: {
+        required: true,
+        minLength: 3,
+        maxLength: 255
     },
-    DESCRIPTION: {
-        REQUIRED: true,
-        MIN_LENGTH: 0,
-        MAX_LENGTH: 1000
+    description: {
+        required: true,
+        minLength: 0,
+        maxLength: 1000
     },
-    GENRE: {
-        REQUIRED: true,
-        MIN_LENGTH: 3,
-        MAX_LENGTH: 100
+    genre: {
+        required: true,
+        minLength: 3,
+        maxLength: 100
     },
-    DIRECTOR: {
-        REQUIRED: true,
-        MIN_LENGTH: 3,
-        MAX_LENGTH: 100
+    director: {
+        required: true,
+        minLength: 3,
+        maxLength: 100
     },
-    RELEASE_DATE: {
-        REQUIRED: true,
-        // LATEST is calculated dynamically when needed, not here (if it was here, it would be calculated on server startup, not on every request).
-        EARLIEST: '1888-01-01' // The year of the first known film
+    releaseDate: {
+        required: true,
+        earliest: '1888-01-01'
     },
-    RUNTIME: {
-        REQUIRED: true,
-        MIN: 1, // in minutes
-        MAX: 500 // in minutes
+    runtime: {
+        required: true,
+        min: 1,
+        max: 500
     },
-    POSTER_URL: {
-        REQUIRED: true,
-        MIN_LENGTH: 0,
-        MAX_LENGTH: 2083 // Maximum URL length
+    posterUrl: {
+        required: true,
+        minLength: 0,
+        maxLength: 2083
     }
 }
 
-export default MOVIE_CONSTRAINTS;
+export default movieConstraints;

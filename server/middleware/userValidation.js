@@ -30,7 +30,7 @@ const validateUser = (req, res, next) => {
 // ============================================================================
 
 const validateNickname = (nickname, errors) => {
-    const required = userConstraints.NICKNAME.REQUIRED;
+    const required = userConstraints.nickname.required;
 
     if (!nickname) {
         if (required) {
@@ -39,13 +39,13 @@ const validateNickname = (nickname, errors) => {
         return;
     }
 
-    if (nickname.length < userConstraints.NICKNAME.MIN_LENGTH || nickname.length > userConstraints.NICKNAME.MAX_LENGTH) {
-        errors.push(`Nickname must be between ${userConstraints.NICKNAME.MIN_LENGTH} and ${userConstraints.NICKNAME.MAX_LENGTH} characters long`);
+    if (nickname.length < userConstraints.nickname.minLength || nickname.length > userConstraints.nickname.maxLength) {
+        errors.push(`Nickname must be between ${userConstraints.nickname.minLength} and ${userConstraints.nickname.maxLength} characters long`);
     }
 }
 
 const validateEmail = (email, errors) => {
-    const required = userConstraints.EMAIL.REQUIRED;
+    const required = userConstraints.email.required;
 
     if (!email) {
         if (required) {
@@ -54,17 +54,17 @@ const validateEmail = (email, errors) => {
         return;
     }
 
-    if (email.length < userConstraints.EMAIL.MIN_LENGTH || email.length > userConstraints.EMAIL.MAX_LENGTH) {
-        errors.push(`Email must be between ${userConstraints.EMAIL.MIN_LENGTH} and ${userConstraints.EMAIL.MAX_LENGTH} characters long`);
+    if (email.length < userConstraints.email.minLength || email.length > userConstraints.email.maxLength) {
+        errors.push(`Email must be between ${userConstraints.email.minLength} and ${userConstraints.email.maxLength} characters long`);
     }
 
-    if (!userConstraints.EMAIL.PATTERN.test(email)) {
+    if (!userConstraints.email.pattern.test(email)) {
         errors.push('Email must be a valid email address');
     }
 }
 
 const validatePassword = (password, errors) => {
-    const required = userConstraints.PASSWORD.REQUIRED;
+    const required = userConstraints.password.required;
 
     if (!password) {
         if (required) {
@@ -73,15 +73,13 @@ const validatePassword = (password, errors) => {
         return;
     }
 
-    if (password.length < userConstraints.PASSWORD.MIN_LENGTH || password.length > userConstraints.PASSWORD.MAX_LENGTH) {
-        errors.push(`Password must be between ${userConstraints.PASSWORD.MIN_LENGTH} and ${userConstraints.PASSWORD.MAX_LENGTH} characters long`);
+    if (password.length < userConstraints.password.minLength || password.length > userConstraints.password.maxLength) {
+        errors.push(`Password must be between ${userConstraints.password.minLength} and ${userConstraints.password.maxLength} characters long`);
     }
 }
 
-// Internal validation function - NOT used in validateUser()
-// This is for server-side validation after hashing, before database insert
 const validatePasswordHash = (passwordHash, errors) => {
-    const required = userConstraints.PASSWORD_HASH.REQUIRED;
+    const required = userConstraints.passwordHash.required;
 
     if (!passwordHash) {
         if (required) {
@@ -90,17 +88,17 @@ const validatePasswordHash = (passwordHash, errors) => {
         return;
     }
 
-    if (passwordHash.length !== userConstraints.PASSWORD_HASH.LENGTH) {
-        errors.push(`Password hash must be exactly ${userConstraints.PASSWORD_HASH.LENGTH} characters long`);
+    if (passwordHash.length !== userConstraints.passwordHash.length) {
+        errors.push(`Password hash must be exactly ${userConstraints.passwordHash.length} characters long`);
     }
 
-    if (!userConstraints.PASSWORD_HASH.PATTERN.test(passwordHash.toLowerCase())) {
+    if (!userConstraints.passwordHash.pattern.test(passwordHash.toLowerCase())) {
         errors.push('Password hash must be a valid hexadecimal string');
     }
 }
 
 const validateProfilePictureUrl = (profilePictureUrl, errors) => {
-    const required = userConstraints.PROFILE_PICTURE_URL.REQUIRED;
+    const required = userConstraints.profilePictureUrl.required;
 
     if (!profilePictureUrl) {
         if (required) {
@@ -109,18 +107,17 @@ const validateProfilePictureUrl = (profilePictureUrl, errors) => {
         return;
     }
 
-    if (profilePictureUrl.length < userConstraints.PROFILE_PICTURE_URL.MIN_LENGTH || profilePictureUrl.length > userConstraints.PROFILE_PICTURE_URL.MAX_LENGTH) {
-        errors.push(`Profile picture URL must be between ${userConstraints.PROFILE_PICTURE_URL.MIN_LENGTH} and ${userConstraints.PROFILE_PICTURE_URL.MAX_LENGTH} characters long`);
+    if (profilePictureUrl.length < userConstraints.profilePictureUrl.minLength || profilePictureUrl.length > userConstraints.profilePictureUrl.maxLength) {
+        errors.push(`Profile picture URL must be between ${userConstraints.profilePictureUrl.minLength} and ${userConstraints.profilePictureUrl.maxLength} characters long`);
     }
 
-    const urlPattern = /^https?:\/\/.+/i;
-    if (!userConstraints.PROFILE_PICTURE_URL.PATTERN.test(profilePictureUrl)) {
+    if (!userConstraints.profilePictureUrl.pattern.test(profilePictureUrl)) {
         errors.push('Profile picture URL must be a valid URL starting with http:// or https://');
     }
 }
 
 const validateDateOfBirth = (dateOfBirth, errors) => {
-    const required = userConstraints.DATE_OF_BIRTH.REQUIRED;
+    const required = userConstraints.dateOfBirth.required;
 
     if (!dateOfBirth) {
         if (required) {
@@ -130,7 +127,7 @@ const validateDateOfBirth = (dateOfBirth, errors) => {
     }
 
     const date = new Date(dateOfBirth);
-    const earliest = new Date(userConstraints.DATE_OF_BIRTH.EARLIEST);
+    const earliest = new Date(userConstraints.dateOfBirth.earliest);
     const today = new Date();
 
     if (isNaN(date.getTime())) {
@@ -139,26 +136,25 @@ const validateDateOfBirth = (dateOfBirth, errors) => {
     }
 
     if (date < earliest) {
-        errors.push(`Date of birth cannot be earlier than ${userConstraints.DATE_OF_BIRTH.EARLIEST}`);
+        errors.push(`Date of birth cannot be earlier than ${userConstraints.dateOfBirth.earliest}`);
     }
 
     if (date > today) {
         errors.push('Date of birth cannot be in the future');
     }
 
-    // Calculate age
     const age = today.getFullYear() - date.getFullYear();
     const monthDiff = today.getMonth() - date.getMonth();
     const dayDiff = today.getDate() - date.getDate();
     const actualAge = (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) ? age - 1 : age;
 
-    if (actualAge < userConstraints.DATE_OF_BIRTH.MIN_AGE) {
-        errors.push(`User must be at least ${userConstraints.DATE_OF_BIRTH.MIN_AGE} years old`);
+    if (actualAge < userConstraints.dateOfBirth.minAge) {
+        errors.push(`User must be at least ${userConstraints.dateOfBirth.minAge} years old`);
     }
 }
 
 const validateBio = (bio, errors) => {
-    const required = userConstraints.BIO.REQUIRED;
+    const required = userConstraints.bio.required;
 
     if (!bio) {
         if (required) {
@@ -167,8 +163,8 @@ const validateBio = (bio, errors) => {
         return;
     }
 
-    if (bio.length < userConstraints.BIO.MIN_LENGTH || bio.length > userConstraints.BIO.MAX_LENGTH) {
-        errors.push(`Bio must be between ${userConstraints.BIO.MIN_LENGTH} and ${userConstraints.BIO.MAX_LENGTH} characters long`);
+    if (bio.length < userConstraints.bio.minLength || bio.length > userConstraints.bio.maxLength) {
+        errors.push(`Bio must be between ${userConstraints.bio.minLength} and ${userConstraints.bio.maxLength} characters long`);
     }
 }
 

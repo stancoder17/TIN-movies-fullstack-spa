@@ -1,17 +1,16 @@
-const RATING_CONSTRAINTS = {
-    SCORE: {
-        REQUIRED: true,
-        MIN: 1.0,
-        MAX: 10.0,
-        STEP: 0.1,
-        DECIMAL_PLACES: 1
+const ratingConstraints = {
+    score: {
+        required: true,
+        min: 1.0,
+        max: 10.0,
+        step: 0.1,
+        decimalPlaces: 1
     },
-    COMMENT: {
-        MIN_LENGTH: 0,
-        MAX_LENGTH: 1500
+    comment: {
+        minLength: 0,
+        maxLength: 1500
     }
-    // CREATED_AT is set automatically to the current timestamp by the database (DEFAULT CURRENT_TIMESTAMP)
 }
 
-export default RATING_CONSTRAINTS;
+export default ratingConstraints;
 

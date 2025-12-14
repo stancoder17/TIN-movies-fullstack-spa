@@ -26,7 +26,7 @@ const validateRating = (req, res, next) => {
 // ============================================================================
 
 const validateScore = (score, errors) => {
-    const required = ratingConstraints.SCORE.REQUIRED;
+    const required = ratingConstraints.score.required;
 
     if (score === undefined || score === null || score === '') {
         if (required) {
@@ -42,13 +42,13 @@ const validateScore = (score, errors) => {
         return;
     }
 
-    if (scoreNum < ratingConstraints.SCORE.MIN || scoreNum > ratingConstraints.SCORE.MAX) {
-        errors.push(`Score must be between ${ratingConstraints.SCORE.MIN} and ${ratingConstraints.SCORE.MAX}`);
+    if (scoreNum < ratingConstraints.score.min || scoreNum > ratingConstraints.score.max) {
+        errors.push(`Score must be between ${ratingConstraints.score.min} and ${ratingConstraints.score.max}`);
     }
 }
 
 const validateComment = (comment, errors) => {
-    const required = ratingConstraints.COMMENT.REQUIRED;
+    const required = ratingConstraints.comment.required;
 
     if (!comment) {
         if (required) {
@@ -57,10 +57,9 @@ const validateComment = (comment, errors) => {
         return;
     }
 
-    if (comment.length < ratingConstraints.COMMENT.MIN_LENGTH || comment.length > ratingConstraints.COMMENT.MAX_LENGTH) {
-        errors.push(`Comment must be between ${ratingConstraints.COMMENT.MIN_LENGTH} and ${ratingConstraints.COMMENT.MAX_LENGTH} characters long`);
+    if (comment.length < ratingConstraints.comment.minLength || comment.length > ratingConstraints.comment.maxLength) {
+        errors.push(`Comment must be between ${ratingConstraints.comment.minLength} and ${ratingConstraints.comment.maxLength} characters long`);
     }
 }
 
 export default validateRating;
-

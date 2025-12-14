@@ -31,7 +31,7 @@ const validateMovie = (req, res, next) => {
 // ============================================================================
 
 const validateTitle = (title, errors) => {
-    const required = movieConstraints.TITLE.REQUIRED;
+    const required = movieConstraints.title.required;
 
     if (!title) {
         if (required) {
@@ -40,13 +40,13 @@ const validateTitle = (title, errors) => {
         return;
     }
 
-    if (title.length < movieConstraints.TITLE.MIN_LENGTH || title.length > movieConstraints.TITLE.MAX_LENGTH) {
-        errors.push(`Title must be between ${movieConstraints.TITLE.MIN_LENGTH} and ${movieConstraints.TITLE.MAX_LENGTH} characters long`);
+    if (title.length < movieConstraints.title.minLength || title.length > movieConstraints.title.maxLength) {
+        errors.push(`Title must be between ${movieConstraints.title.minLength} and ${movieConstraints.title.maxLength} characters long`);
     }
 }
 
 const validateDescription = (description, errors) => {
-    const required = movieConstraints.DESCRIPTION.REQUIRED;
+    const required = movieConstraints.description.required;
 
     if (!description) {
         if (required) {
@@ -55,13 +55,13 @@ const validateDescription = (description, errors) => {
         return;
     }
 
-    if (description.length < movieConstraints.DESCRIPTION.MIN_LENGTH || description.length > movieConstraints.DESCRIPTION.MAX_LENGTH) {
-        errors.push(`Description must be between ${movieConstraints.DESCRIPTION.MIN_LENGTH} and ${movieConstraints.DESCRIPTION.MAX_LENGTH} characters long`);
+    if (description.length < movieConstraints.description.minLength || description.length > movieConstraints.description.maxLength) {
+        errors.push(`Description must be between ${movieConstraints.description.minLength} and ${movieConstraints.description.maxLength} characters long`);
     }
 }
 
 const validateGenre = (genre, errors) => {
-    const required = movieConstraints.GENRE.REQUIRED;
+    const required = movieConstraints.genre.required;
 
     if (!genre) {
         if (required) {
@@ -70,13 +70,13 @@ const validateGenre = (genre, errors) => {
         return;
     }
 
-    if (genre.length < movieConstraints.GENRE.MIN_LENGTH || genre.length > movieConstraints.GENRE.MAX_LENGTH) {
-        errors.push(`Genre must be between ${movieConstraints.GENRE.MIN_LENGTH} and ${movieConstraints.GENRE.MAX_LENGTH} characters long`);
+    if (genre.length < movieConstraints.genre.minLength || genre.length > movieConstraints.genre.maxLength) {
+        errors.push(`Genre must be between ${movieConstraints.genre.minLength} and ${movieConstraints.genre.maxLength} characters long`);
     }
 }
 
 const validateDirector = (director, errors) => {
-    const required = movieConstraints.DIRECTOR.REQUIRED;
+    const required = movieConstraints.director.required;
 
     if (!director) {
         if (required) {
@@ -85,13 +85,13 @@ const validateDirector = (director, errors) => {
         return;
     }
 
-    if (director.length < movieConstraints.DIRECTOR.MIN_LENGTH || director.length > movieConstraints.DIRECTOR.MAX_LENGTH) {
-        errors.push(`Director must be between ${movieConstraints.DIRECTOR.MIN_LENGTH} and ${movieConstraints.DIRECTOR.MAX_LENGTH} characters long`);
+    if (director.length < movieConstraints.director.minLength || director.length > movieConstraints.director.maxLength) {
+        errors.push(`Director must be between ${movieConstraints.director.minLength} and ${movieConstraints.director.maxLength} characters long`);
     }
 }
 
 const validateReleaseDate = (releaseDate, errors) => {
-    const required = movieConstraints.RELEASE_DATE.REQUIRED;
+    const required = movieConstraints.releaseDate.required;
 
     if (!releaseDate) {
         if (required) {
@@ -101,8 +101,8 @@ const validateReleaseDate = (releaseDate, errors) => {
     }
 
     const date = new Date(releaseDate);
-    const minDate = new Date(movieConstraints.RELEASE_DATE.EARLIEST);
-    const maxDate = new Date(); // Current date
+    const minDate = new Date(movieConstraints.releaseDate.earliest);
+    const maxDate = new Date();
 
     if (isNaN(date.getTime())) {
         errors.push('Release date must be a valid date');
@@ -110,7 +110,7 @@ const validateReleaseDate = (releaseDate, errors) => {
     }
 
     if (date < minDate) {
-        errors.push(`Release date cannot be earlier than ${movieConstraints.RELEASE_DATE.EARLIEST}`);
+        errors.push(`Release date cannot be earlier than ${movieConstraints.releaseDate.earliest}`);
     }
 
     if (date > maxDate) {
@@ -119,7 +119,7 @@ const validateReleaseDate = (releaseDate, errors) => {
 }
 
 const validateRuntime = (runtime, errors) => {
-    const required = movieConstraints.RUNTIME.REQUIRED;
+    const required = movieConstraints.runtime.required;
 
     if (runtime === undefined || runtime === null || runtime === '') {
         if (required) {
@@ -135,13 +135,13 @@ const validateRuntime = (runtime, errors) => {
         return;
     }
 
-    if (runtimeNum < movieConstraints.RUNTIME.MIN || runtimeNum > movieConstraints.RUNTIME.MAX) {
-        errors.push(`Runtime must be between ${movieConstraints.RUNTIME.MIN} and ${movieConstraints.RUNTIME.MAX} minutes`);
+    if (runtimeNum < movieConstraints.runtime.min || runtimeNum > movieConstraints.runtime.max) {
+        errors.push(`Runtime must be between ${movieConstraints.runtime.min} and ${movieConstraints.runtime.max} minutes`);
     }
 }
 
 const validatePosterUrl = (posterUrl, errors) => {
-    const required = movieConstraints.POSTER_URL.REQUIRED;
+    const required = movieConstraints.posterUrl.required;
 
     if (!posterUrl) {
         if (required) {
@@ -150,8 +150,8 @@ const validatePosterUrl = (posterUrl, errors) => {
         return;
     }
 
-    if (posterUrl.length < movieConstraints.POSTER_URL.MIN_LENGTH || posterUrl.length > movieConstraints.POSTER_URL.MAX_LENGTH) {
-        errors.push(`Poster URL must be between ${movieConstraints.POSTER_URL.MIN_LENGTH} and ${movieConstraints.POSTER_URL.MAX_LENGTH} characters long`);
+    if (posterUrl.length < movieConstraints.posterUrl.minLength || posterUrl.length > movieConstraints.posterUrl.maxLength) {
+        errors.push(`Poster URL must be between ${movieConstraints.posterUrl.minLength} and ${movieConstraints.posterUrl.maxLength} characters long`);
     }
 }
 

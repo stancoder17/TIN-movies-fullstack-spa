@@ -77,4 +77,4 @@ const deleteMovie = async (req, res) => {
     }
 }
 
-export { getAllMovies, getMovieById, createMovie, updateMovie };
+export { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie };
