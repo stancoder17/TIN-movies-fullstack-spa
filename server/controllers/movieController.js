@@ -1,5 +1,4 @@
-const Movie = require('../models/Movie.js');
-
+import Movie from '../models/Movie.js';
 const getAllMovies = async (req, res) => {
     try {
         const movies = await Movie.getAll();
@@ -7,7 +6,8 @@ const getAllMovies = async (req, res) => {
         res.status(200).json(movies);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error while fetching movies' });    }
+        res.status(500).json({ message: 'Server error while fetching movies' });
+    }
 }
 
 const getMovieById = async (req, res) => {
@@ -42,13 +42,31 @@ const createMovie = async (req, res) => {
 const updateMovie = async (req, res) => {
     try {
         const id = req.params.id;
-        const movie = req.body;
 
-        const result = await Movie.update(id, movie);
+        if (!getMovieById(id)) {
+            res.status(404).json({ message: `Movie with id ${id} not found` });
+            return;
+        }
+
+        const updatedMovie = req.body;
+
+        const result = await Movie.update(id, updatedMovie);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while updating movie' });
+    }
+}
+
+const deleteMovie = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        await Movie.delete(id);
+        res.status(204).json();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while deleting movie' });
     }
 }
 
