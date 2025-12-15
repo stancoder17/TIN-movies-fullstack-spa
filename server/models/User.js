@@ -45,14 +45,13 @@ class User {
     static async update(id, user) {
         const passwordHash = this.hashPassword(user.password);
 
-        const sql = 'UPDATE users SET nickname = ?, email = ?, password_hash = ?, profile_picture = ?, date_of_birth = ?, date_of_joining = ?, bio = ? WHERE id = ?';
+        const sql = 'UPDATE users SET nickname = ?, email = ?, password_hash = ?, profile_picture = ?, date_of_birth = ?, bio = ? WHERE id = ?';
         const params = [
             user.nickname,
             user.email,
             passwordHash,
-            user.profile_picture,
+            user.profile_picture_url,
             user.date_of_birth,
-            user.date_of_joining,
             user.bio,
             id
         ];
@@ -60,7 +59,7 @@ class User {
         await db.execute(sql, params);
 
         const { password, ...userWithoutPassword } = user;
-        return { id, ...userWithoutPassword, password_hash: passwordHash };
+        return { id, ...userWithoutPassword };
     }
 
     static async delete(id) {

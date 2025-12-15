@@ -12,14 +12,7 @@ const getAllMovies = async (req, res) => {
 
 const getMovieById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const movie = await Movie.getById(id);
-
-        if (!movie) {
-            res.status(404).json({ message: `Movie with id ${id} not found` });
-            return;
-        }
-
+        const movie = req.resource;
         res.status(200).json(movie);
     } catch (error) {
         console.error(error);
@@ -42,13 +35,6 @@ const createMovie = async (req, res) => {
 const updateMovie = async (req, res) => {
     try {
         const id = req.params.id;
-
-        const existingMovie = await Movie.getById(id);
-        if (!existingMovie) {
-            res.status(404).json({ message: `Movie with id ${id} not found` });
-            return;
-        }
-
         const updatedMovie = req.body;
 
         const result = await Movie.update(id, updatedMovie);
@@ -62,12 +48,6 @@ const updateMovie = async (req, res) => {
 const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id;
-
-        const existingMovie = await Movie.getById(id);
-        if (!existingMovie) {
-            res.status(404).json({ message: `Movie with id ${id} not found` });
-            return;
-        }
 
         await Movie.delete(id);
         res.status(204).end();

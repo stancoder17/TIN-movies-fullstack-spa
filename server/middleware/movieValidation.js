@@ -40,6 +40,12 @@ const validateTitle = (title, errors) => {
         return;
     }
 
+    if (typeof title !== 'string') {
+        errors.push('Title must be a string');
+        return;
+    }
+
+    const trimmedTitle = title.trim();
     if (title.length < movieConstraints.title.minLength || title.length > movieConstraints.title.maxLength) {
         errors.push(`Title must be between ${movieConstraints.title.minLength} and ${movieConstraints.title.maxLength} characters long`);
     }

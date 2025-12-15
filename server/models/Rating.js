@@ -17,21 +17,18 @@ class Rating {
     }
 
     static async create(rating) {
-        const createdAt = new Date().toISOString(); // now
-
-        const sql = 'INSERT INTO ratings (user_id, movie_id, score, comment, created_at) VALUES (?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO ratings (user_id, movie_id, score, comment) VALUES (?, ?, ?, ?, ?)';
         const params = [
             rating.user_id,
             rating.movie_id,
             rating.score,
-            rating.comment,
-            createdAt
+            rating.comment
         ];
 
         const [result] = await db.execute(sql, params);
 
         // Return created rating
-        return { id: result.insertId, ...rating, created_at: createdAt };
+        return { id: result.insertId, ...rating };
     }
 
     static async update(id, rating) {
@@ -45,7 +42,7 @@ class Rating {
         await db.execute(sql, params);
 
         // Return updated rating
-        return await Rating.getById(id);
+        return { id: id, ...rating};
     }
 
     static async delete(id) {
@@ -89,7 +86,7 @@ class Rating {
                 r.comment,
                 r.created_at,
                 u.nickname,
-                u.profile_picture
+                u.profile_picture_url
             FROM ratings r
             JOIN users u ON r.user_id = u.id
             WHERE r.movie_id = ?

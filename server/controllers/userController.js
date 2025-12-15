@@ -13,14 +13,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const user = await User.getById(id);
-
-        if (!user) {
-            res.status(404).json({ message: `User with id ${id} not found` });
-            return;
-        }
-
+        const user = req.resource;
         res.status(200).json(user);
     } catch (error) {
         console.error(error);
@@ -42,14 +35,9 @@ const updateUser = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const existingUser = await User.getById(id);
-        if (!existingUser) {
-            res.status(404).json({ message: `User with id ${id} not found` });
-            return;
-        }
-
-        const result = await User.update(id, req.body);
-        res.status(201).json(result);
+        const updatedUser = req.body;
+        const result = await User.update(id, updatedUser);
+        res.status(200).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while updating user' });
@@ -59,12 +47,6 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
-
-        const existingUser = await User.getById(id);
-        if (!existingUser) {
-            res.status(404).json({ message: `User with id ${id} not found` });
-            return;
-        }
 
         await User.delete(id);
         res.status(204).end();

@@ -12,14 +12,7 @@ const getAllRatings = async (req, res) => {
 
 const getRatingById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const rating = await Rating.getById(id);
-
-        if (!rating) {
-            res.status(404).json({ message: `Rating with id ${id} not found` });
-            return;
-        }
-
+        const rating = req.resource;
         res.status(200).json(rating);
     } catch (error) {
         console.error(error);
@@ -42,15 +35,7 @@ const createRating = async (req, res) => {
 const updateRating = async (req, res) => {
     try {
         const id = req.params.id;
-
-        const existingRating = await Rating.getById(id);
-        if (!existingRating) {
-            res.status(404).json({ message: `Rating with id ${id} not found` });
-            return;
-        }
-
         const { score, comment } = req.body;
-        const ratingData = { score, comment };
 
         const result = await Rating.update(id, ratingData);
         res.status(200).json(result);
@@ -63,12 +48,6 @@ const updateRating = async (req, res) => {
 const deleteRating = async (req, res) => {
     try {
         const id = req.params.id;
-
-        const existingRating = await Rating.getById(id);
-        if (!existingRating) {
-            res.status(404).json({ message: `Rating with id ${id} not found` });
-            return;
-        }
 
         await Rating.delete(id);
         res.status(204).end();
