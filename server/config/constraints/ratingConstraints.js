@@ -1,4 +1,12 @@
 const ratingConstraints = {
+    userId: {
+        required: true,
+        min: 1
+    },
+    movieId: {
+        required: true,
+        min: 1
+    },
     score: {
         required: true,
         min: 1.0,

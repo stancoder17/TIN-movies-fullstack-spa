@@ -17,7 +17,7 @@ class Rating {
     }
 
     static async create(rating) {
-        const sql = 'INSERT INTO ratings (user_id, movie_id, score, comment) VALUES (?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO ratings (user_id, movie_id, score, comment) VALUES (?, ?, ?, ?)';
         const params = [
             rating.user_id,
             rating.movie_id,

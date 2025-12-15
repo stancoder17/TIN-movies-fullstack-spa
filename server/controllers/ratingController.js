@@ -22,11 +22,18 @@ const getRatingById = async (req, res) => {
 
 const createRating = async (req, res) => {
     try {
-        const { created_at, ...ratingData } = req.body;
+        const { user_id, movie_id, score, comment } = req.body;
 
+        const ratingData = { user_id, movie_id, score, comment };
         const result = await Rating.create(ratingData);
         res.status(201).json(result);
     } catch (error) {
+        // Check if a rating for this user and movie already exists
+        // Better to do this on the database level
+        if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+            return res.status(409).json({message: 'Rating for this user and movie already exists'});
+        }
+
         console.error(error);
         res.status(500).json({ message: 'Server error while creating rating' });
     }
@@ -37,6 +44,7 @@ const updateRating = async (req, res) => {
         const id = req.params.id;
         const { score, comment } = req.body;
 
+        const ratingData = { score, comment };
         const result = await Rating.update(id, ratingData);
         res.status(200).json(result);
     } catch (error) {

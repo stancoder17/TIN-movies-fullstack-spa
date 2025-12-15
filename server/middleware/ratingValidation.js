@@ -8,6 +8,8 @@ const validateRating = (req, res, next) => {
     const rating = req.body;
     const errors = [];
 
+    validateUserId(rating.user_id, errors);
+    validateMovieId(rating.movie_id, errors);
     validateScore(rating.score, errors);
     validateComment(rating.comment, errors);
 
@@ -24,6 +26,50 @@ const validateRating = (req, res, next) => {
 // ============================================================================
 // FIELDS VALIDATION FUNCTIONS
 // ============================================================================
+
+const validateUserId = (userId, errors) => {
+    const required = ratingConstraints.userId.required;
+
+    if (userId === undefined || userId === null || userId === '') {
+        if (required) {
+            errors.push('User ID is required');
+        }
+        return;
+    }
+
+    const userIdNum = Number(userId);
+
+    if (isNaN(userIdNum) || !Number.isInteger(userIdNum)) {
+        errors.push('User ID must be an integer');
+        return;
+    }
+
+    if (userIdNum < ratingConstraints.userId.min) {
+        errors.push(`User ID must be at least ${ratingConstraints.userId.min}`);
+    }
+}
+
+const validateMovieId = (movieId, errors) => {
+    const required = ratingConstraints.movieId.required;
+
+    if (movieId === undefined || movieId === null || movieId === '') {
+        if (required) {
+            errors.push('Movie ID is required');
+        }
+        return;
+    }
+
+    const movieIdNum = Number(movieId);
+
+    if (isNaN(movieIdNum) || !Number.isInteger(movieIdNum)) {
+        errors.push('Movie ID must be an integer');
+        return;
+    }
+
+    if (movieIdNum < ratingConstraints.movieId.min) {
+        errors.push(`Movie ID must be at least ${ratingConstraints.movieId.min}`);
+    }
+}
 
 const validateScore = (score, errors) => {
     const required = ratingConstraints.score.required;
