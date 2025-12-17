@@ -1,10 +1,10 @@
-import db from '../db.js';
+import db from '../config/database/db.js';
 
 class Movie {
     static async getAll() {
         const sql = 'SELECT * FROM movies';
 
-        const [rows] = await db.execute(sql);
+        const rows = await db.all(sql);
         return rows;
     }
 
@@ -12,8 +12,8 @@ class Movie {
         const sql = 'SELECT * FROM movies WHERE id = ?';
         const params = [id];
 
-        const [rows] = await db.execute(sql, params);
-        return rows[0];
+        const row = await db.get(sql, params);
+        return row;
     }
 
     static async create(movie) {
@@ -28,11 +28,11 @@ class Movie {
             movie.poster_url
         ];
 
-        const [result] = await db.execute(sql, params);
+        const result = await db.run(sql, params);
 
         // Return created movie
         // insertId is an id (auto-incremented) of the newly created movie
-        return { id: result.insertId, ...movie };
+        return { id: result.lastID, ...movie };
     }
 
     static async update(id, movie) {
@@ -48,7 +48,7 @@ class Movie {
             id
         ];
 
-        await db.execute(sql, params);
+        await db.run(sql, params);
 
         // Return updated movie
         return { id, ...movie };
@@ -58,7 +58,7 @@ class Movie {
         const sql = 'DELETE FROM movies WHERE id = ?';
         const params = [id];
 
-        await db.execute(sql, params);
+        await db.run(sql, params);
     }
 }
 

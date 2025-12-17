@@ -1,4 +1,4 @@
-import db from '../db.js';
+import db from '../config/database/db.js';
 import crypto from 'crypto';
 
 class User {
@@ -10,7 +10,7 @@ class User {
     static async getAll() {
         const sql = 'SELECT * FROM users';
 
-        const [rows] = await db.execute(sql);
+        const rows = await db.all(sql);
         return rows;
     }
 
@@ -18,34 +18,34 @@ class User {
         const sql = 'SELECT * FROM users WHERE id = ?';
         const params = [id];
 
-        const [rows] = await db.execute(sql, params);
-        return rows[0];
+        const row = await db.get(sql, params);
+        return row;
     }
 
     static async create(user) {
         const passwordHash = this.hashPassword(user.password);
 
-        const sql = 'INSERT INTO users (nickname, email, password_hash, profile_picture, date_of_birth, date_of_joining, bio) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO users (nickname, email, password_hash, profile_picture_url, date_of_birth, date_of_joining, bio) VALUES (?, ?, ?, ?, ?, ?, ?)';
         const params = [
             user.nickname,
             user.email,
             passwordHash,
-            user.profile_picture,
+            user.profile_picture_url,
             user.date_of_birth,
             user.date_of_joining,
             user.bio
         ];
 
-        const [result] = await db.execute(sql, params);
+        const result = await db.run(sql, params);
 
         const { password, ...userWithoutPassword } = user;
-        return { id: result.insertId, ...userWithoutPassword, password_hash: passwordHash };
+        return { id: result.lastID, ...userWithoutPassword, password_hash: passwordHash };
     }
 
     static async update(id, user) {
         const passwordHash = this.hashPassword(user.password);
 
-        const sql = 'UPDATE users SET nickname = ?, email = ?, password_hash = ?, profile_picture = ?, date_of_birth = ?, bio = ? WHERE id = ?';
+        const sql = 'UPDATE users SET nickname = ?, email = ?, password_hash = ?, profile_picture_url = ?, date_of_birth = ?, bio = ? WHERE id = ?';
         const params = [
             user.nickname,
             user.email,
@@ -56,7 +56,7 @@ class User {
             id
         ];
 
-        await db.execute(sql, params);
+        await db.run(sql, params);
 
         const { password, ...userWithoutPassword } = user;
         return { id, ...userWithoutPassword };
@@ -66,7 +66,7 @@ class User {
         const sql = 'DELETE FROM users WHERE id = ?';
         const params = [id];
 
-        await db.execute(sql, params);
+        await db.run(sql, params);
     }
 
     // For authentication purposes
@@ -74,8 +74,8 @@ class User {
         const sql = 'SELECT * FROM users WHERE email = ?';
         const params = [email];
 
-        const [rows] = await db.execute(sql, params);
-        return rows[0];
+        const row = await db.get(sql, params);
+        return row;
     }
 }
 

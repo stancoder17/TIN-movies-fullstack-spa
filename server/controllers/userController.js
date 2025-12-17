@@ -26,9 +26,7 @@ const createUser = async (req, res) => {
         const result = await User.create(req.body);
         res.status(201).json(result);
     } catch (error) {
-        // Check if a user with this email already exists
-        // Better to do this on the database level
-        if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+        if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE')) {
             return res.status(409).json({message: 'User with this email already exists'});
         }
 
