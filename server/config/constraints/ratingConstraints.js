@@ -11,7 +11,7 @@ const ratingConstraints = {
         required: true,
         min: 1.0,
         max: 10.0,
-        step: 0.1,
+        increment: 0.1,
         decimalPlaces: 1
     },
     comment: {

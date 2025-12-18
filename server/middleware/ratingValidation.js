@@ -91,6 +91,25 @@ const validateScore = (score, errors) => {
     if (scoreNum < ratingConstraints.score.min || scoreNum > ratingConstraints.score.max) {
         errors.push(`Score must be between ${ratingConstraints.score.min} and ${ratingConstraints.score.max}`);
     }
+
+    // Check increment
+    // Min. score is subtracted, because increments are calculated from there
+    // Example: 1.3 - 1.0 = 0.3; 0.3 % 0.3 = 0 -> valid
+    // without subtraction: 1.3 % 0.3 != 0 -> invalid
+    // then the score is multiplied to prevent floating-point division
+    const dividend = (scoreNum - ratingConstraints.score.min) * 10 * ratingConstraints.score.max;
+    const divisor = ratingConstraints.score.increment * 10 * ratingConstraints.score.max;
+    if (dividend % divisor !== 0) {
+        errors.push('Score must be in increments of ' + ratingConstraints.score.increment);
+    }
+
+    // Check decimalPlaces
+    const decimalPlaces = score.toString().split('.')[1];
+    if (decimalPlaces) { // decimalPlaces is undefined if score is an integer
+        if (decimalPlaces.length > ratingConstraints.score.decimalPlaces) {
+            errors.push(`Score must have at most ${ratingConstraints.score.decimalPlaces} decimal places`);
+        }
+    }
 }
 
 const validateComment = (comment, errors) => {

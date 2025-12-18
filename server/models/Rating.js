@@ -28,7 +28,7 @@ class Rating {
         const result = await db.run(sql, params);
 
         // Return created rating
-        return { id: result.lastID, ...rating };
+        return Rating.getById(result.lastId);
     }
 
     static async update(id, rating) {
@@ -39,10 +39,10 @@ class Rating {
             id
         ];
 
-        await db.run(sql, params);
+        const result = await db.run(sql, params);
 
         // Return updated rating
-        return { id: id, ...rating};
+        return Rating.getById(result.lastId);
     }
 
     static async delete(id) {

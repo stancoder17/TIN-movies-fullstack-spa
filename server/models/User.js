@@ -25,21 +25,18 @@ class User {
     static async create(user) {
         const passwordHash = this.hashPassword(user.password);
 
-        const sql = 'INSERT INTO users (nickname, email, password_hash, profile_picture_url, date_of_birth, date_of_joining, bio) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO users (nickname, email, password_hash, profile_picture_url, date_of_birth, bio) VALUES (?, ?, ?, ?, ?, ?)';
         const params = [
             user.nickname,
             user.email,
             passwordHash,
             user.profile_picture_url,
             user.date_of_birth,
-            user.date_of_joining,
             user.bio
         ];
-
         const result = await db.run(sql, params);
 
-        const { password, ...userWithoutPassword } = user;
-        return { id: result.lastID, ...userWithoutPassword, password_hash: passwordHash };
+        return await User.getById(result.lastID);
     }
 
     static async update(id, user) {
@@ -55,11 +52,9 @@ class User {
             user.bio,
             id
         ];
-
         await db.run(sql, params);
 
-        const { password, ...userWithoutPassword } = user;
-        return { id, ...userWithoutPassword };
+        return await User.getById(result.lastID);
     }
 
     static async delete(id) {

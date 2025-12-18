@@ -1,4 +1,5 @@
 import Rating from '../models/Rating.js';
+import ratingConstraints from '../config/constraints/ratingConstraints.js';
 
 const getAllRatings = async (req, res) => {
     try {
@@ -24,7 +25,11 @@ const createRating = async (req, res) => {
     try {
         const { user_id, movie_id, score, comment } = req.body;
 
-        const ratingData = { user_id, movie_id, score, comment };
+        // Round score to the specified decimal places
+        const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces)
+        const scoreRounded = Math.round(score * multiplier) / multiplier;
+
+        const ratingData = { user_id, movie_id, scoreRounded, comment };
         const result = await Rating.create(ratingData);
         res.status(201).json(result);
     } catch (error) {
@@ -42,7 +47,11 @@ const updateRating = async (req, res) => {
         const id = req.params.id;
         const { score, comment } = req.body;
 
-        const ratingData = { score, comment };
+        // Round score to the specified decimal places
+        const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces)
+        const scoreRounded = Math.round(score * multiplier) / multiplier;
+
+        const ratingData = { scoreRounded, comment };
         const result = await Rating.update(id, ratingData);
         res.status(200).json(result);
     } catch (error) {

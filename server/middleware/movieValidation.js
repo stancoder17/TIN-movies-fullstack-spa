@@ -159,6 +159,10 @@ const validatePosterUrl = (posterUrl, errors) => {
     if (posterUrl.length < movieConstraints.posterUrl.minLength || posterUrl.length > movieConstraints.posterUrl.maxLength) {
         errors.push(`Poster URL must be between ${movieConstraints.posterUrl.minLength} and ${movieConstraints.posterUrl.maxLength} characters long`);
     }
+
+    if (!movieConstraints.posterUrl.pattern.test(posterUrl)) {
+        errors.push('Poster URL must be a valid URL starting with http:// or https://');
+    }
 }
 
 export default validateMovie;

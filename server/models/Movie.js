@@ -31,8 +31,7 @@ class Movie {
         const result = await db.run(sql, params);
 
         // Return created movie
-        // insertId is an id (auto-incremented) of the newly created movie
-        return { id: result.lastID, ...movie };
+        return Movie.getById(result.lastId);
     }
 
     static async update(id, movie) {
@@ -48,10 +47,10 @@ class Movie {
             id
         ];
 
-        await db.run(sql, params);
+        const result = await db.run(sql, params);
 
         // Return updated movie
-        return { id, ...movie };
+        return Movie.getById(result.lastID);
     }
 
     static async delete(id) {

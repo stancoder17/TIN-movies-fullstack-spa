@@ -31,7 +31,8 @@ const movieConstraints = {
     posterUrl: {
         required: true,
         minLength: 0,
-        maxLength: 2083
+        maxLength: 2083,
+        pattern: /^https?:\/\/.+/i
     }
 }
 
