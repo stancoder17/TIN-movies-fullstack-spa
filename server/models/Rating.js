@@ -4,16 +4,14 @@ class Rating {
     static async getAll() {
         const sql = 'SELECT * FROM ratings';
 
-        const rows = await db.all(sql);
-        return rows;
+        return await db.all(sql);
     }
 
     static async getById(id) {
         const sql = 'SELECT * FROM ratings WHERE id = ?';
         const params = [id];
 
-        const row = await db.get(sql, params);
-        return row;
+        return await db.get(sql, params);
     }
 
     static async create(rating) {
@@ -56,24 +54,21 @@ class Rating {
         const sql = 'SELECT * FROM ratings WHERE movie_id = ?';
         const params = [movieId];
 
-        const rows = await db.all(sql, params);
-        return rows;
+        return await db.all(sql, params);
     }
 
     static async getByUserId(userId) {
         const sql = 'SELECT * FROM ratings WHERE user_id = ?';
         const params = [userId];
 
-        const rows = await db.all(sql, params);
-        return rows;
+        return await db.all(sql, params);
     }
 
     static async getByUserAndMovie(userId, movieId) {
         const sql = 'SELECT * FROM ratings WHERE user_id = ? AND movie_id = ?';
         const params = [userId, movieId];
 
-        const row = await db.get(sql, params);
-        return row;
+        return await db.get(sql, params);
     }
 
     static async getMovieRatingsWithDetails(movieId) {
@@ -94,8 +89,7 @@ class Rating {
         `;
         const params = [movieId];
 
-        const rows = await db.all(sql, params);
-        return rows;
+        return await db.all(sql, params);
     }
 
     static async getUserRatingsWithDetails(userId) {
@@ -116,8 +110,7 @@ class Rating {
         `;
         const params = [userId];
 
-        const rows = await db.all(sql, params);
-        return rows;
+        return await db.all(sql, params);
     }
 }
 

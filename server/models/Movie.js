@@ -4,16 +4,14 @@ class Movie {
     static async getAll() {
         const sql = 'SELECT * FROM movies';
 
-        const rows = await db.all(sql);
-        return rows;
+        return await db.all(sql);
     }
 
     static async getById(id) {
         const sql = 'SELECT * FROM movies WHERE id = ?';
         const params = [id];
 
-        const row = await db.get(sql, params);
-        return row;
+        return await db.get(sql, params);
     }
 
     static async create(movie) {

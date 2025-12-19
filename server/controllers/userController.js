@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Rating from "../models/Rating.js";
 
 const getAllUsers = async (req, res) => {
     try {
@@ -14,7 +15,15 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const user = req.resource;
-        res.status(200).json(user);
+
+        // Get user's ratings
+        const ratings = await Rating.getByUserId(user.id);
+
+        res.status(200).json({
+            ...user,
+            ratingsCount : ratings.length,
+            ratings: ratings
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching user' });

@@ -10,16 +10,14 @@ class User {
     static async getAll() {
         const sql = 'SELECT * FROM users';
 
-        const rows = await db.all(sql);
-        return rows;
+        return await db.all(sql);
     }
 
     static async getById(id) {
         const sql = 'SELECT * FROM users WHERE id = ?';
         const params = [id];
 
-        const row = await db.get(sql, params);
-        return row;
+        return await db.get(sql, params);
     }
 
     static async create(user) {
@@ -69,8 +67,7 @@ class User {
         const sql = 'SELECT * FROM users WHERE email = ?';
         const params = [email];
 
-        const row = await db.get(sql, params);
-        return row;
+        return await db.get(sql, params);
     }
 }
 
