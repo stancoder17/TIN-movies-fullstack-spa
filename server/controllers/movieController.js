@@ -4,7 +4,24 @@ import { calculateAverageScore } from '../utils/movieUtils.js';
 
 const getAllMovies = async (req, res) => {
     try {
-        const movies = await Movie.getAll();
+        // Get filters from query params ('undefined' if not provided)
+        const filters = {};
+
+        if (req.query.genres) {
+            filters.genres = Array.isArray(req.query.genres)
+                ? req.query.genres
+                : [req.query.genres];
+        }
+
+        if (req.query.minDate) {
+            filters.minDate = req.query.minDate;
+        }
+
+        if (req.query.maxDate) {
+            filters.maxDate = req.query.maxDate;
+        }
+
+        const movies = await Movie.getAll(filters);
 
         const moviesWithRatings = await Promise.all(
             movies.map(async movie => {
@@ -51,6 +68,16 @@ const getMovieById = async (req, res) => {
     }
 }
 
+const getMovieFilterFormFields = async (req, res) => {
+    try {
+        const result = await Movie.getFilterFormFields();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching movie filter form fields' });
+    }
+}
+
 const createMovie = async (req, res) => {
     try {
         const movie = req.body;
@@ -88,4 +115,4 @@ const deleteMovie = async (req, res) => {
     }
 }
 
-export { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie };
+export { getAllMovies, getMovieFilterFormFields, getMovieById, createMovie, updateMovie, deleteMovie };

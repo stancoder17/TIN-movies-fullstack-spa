@@ -455,6 +455,12 @@ select {
     margin-right: var(--space-l);
 }
 
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .text-accent {
     color: var(--color-text-accent);
 }

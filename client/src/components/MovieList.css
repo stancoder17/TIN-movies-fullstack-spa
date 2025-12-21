@@ -42,3 +42,9 @@ main {
     align-items: flex-start;
     width: 100%;
 }
+
+.form-input-group {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+}

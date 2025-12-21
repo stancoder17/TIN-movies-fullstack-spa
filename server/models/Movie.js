@@ -1,10 +1,34 @@
 import db from '../config/database/db.js';
+import movieConstraints from '../config/constraints/movieConstraints.js';
 
 class Movie {
-    static async getAll() {
-        const sql = 'SELECT * FROM movies';
+    static async getAll(filters = {}) {
+        let sql = 'SELECT * FROM movies';
+        const hasAnyFilter = Object.values(filters).some(value => value !== undefined);
+        const params = [];
 
-        return await db.all(sql);
+        if (hasAnyFilter) {
+            sql += ' WHERE ';
+            let hasFiltersApplied = false;
+
+            if (filters.genres) { // genre IN (?, ?, ?, ..., ?)
+                sql += `genre IN (${filters.genres.map((genre) => {
+                    params.push(genre);
+                    return '?';
+                }).join(', ')})`;
+                hasFiltersApplied = true;
+            }
+
+            if (filters.minDate && filters.maxDate) {
+                if (hasFiltersApplied) sql += ' AND ';
+
+                sql += "strftime('%Y', release_date) BETWEEN ? AND ?";
+                params.push(filters.minDate.toString());
+                params.push(filters.maxDate.toString());
+            }
+        }
+
+        return await db.all(sql, params);
     }
 
     static async getById(id) {
@@ -14,15 +38,22 @@ class Movie {
         return await db.get(sql, params);
     }
 
-    static async getFiltersFormFields() {
-        return [
-            { type: 'checkbox', name: 'genres', value: 'comedy', checked: true },
-            { type: 'checkbox', name: 'genres', value: 'drama', checked: true },
-            { type: 'checkbox', name: 'genres', value: 'sci-fi', checked: true },
-            { type: 'checkbox', name: 'genres', value: 'action', checked: true },
-            { type: 'checkbox', name: 'genres', value: 'crime', checked: true },
-            { type: 'checkbox', name: 'genres', value: 'thriller', checked: true },
-        ]
+    static async getFilterFormFields() {
+        const minDate = new Date(movieConstraints.releaseDate.earliest).getFullYear();
+        const maxDate = new Date().getFullYear();
+
+        return {
+            genres: [
+                { type: 'checkbox', label: 'Comedy', name: 'genres', value: 'comedy', checked: true },
+                { type: 'checkbox', label: 'Drama', name: 'genres', value: 'drama', checked: true },
+                { type: 'checkbox', label: 'Sci-fi', name: 'genres', value: 'sci-fi', checked: true },
+                { type: 'checkbox', label: 'Action', name: 'genres', value: 'action', checked: true },
+                { type: 'checkbox', label: 'Crime', name: 'genres', value: 'crime', checked: true },
+                { type: 'checkbox', label: 'Thriller', name: 'genres', value: 'thriller', checked: true },
+            ],
+            minDate: minDate,
+            maxDate: maxDate
+        };
     }
 
     static async create(movie) {

@@ -14,7 +14,7 @@ function MovieListItem({ movie }) {
             <div className="media-summary">
                 <h1 className="text-main">{movie.title}</h1>
                 <h3 className="text-main text-main-dark">({releaseYear})</h3>
-                <h3 className="text-main"><strong>Director: </strong>{movie.director}</h3>
+                <h3 className="text-main"><span className='text-main-dark'>Director:</span> {movie.director}</h3>
                 <p className="text-accent">{movie.description}</p>
             </div>
 
