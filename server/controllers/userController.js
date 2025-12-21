@@ -14,6 +14,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
+        // resource retrieved from resourceExists middleware
         const user = req.resource;
 
         // Get user's ratings

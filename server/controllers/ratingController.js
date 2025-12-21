@@ -13,6 +13,7 @@ const getAllRatings = async (req, res) => {
 
 const getRatingById = async (req, res) => {
     try {
+        // resource retrieved from resourceExists middleware
         const rating = req.resource;
         res.status(200).json(rating);
     } catch (error) {
