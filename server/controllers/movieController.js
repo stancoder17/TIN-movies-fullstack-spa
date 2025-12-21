@@ -1,11 +1,27 @@
 import Movie from '../models/Movie.js';
 import Rating from '../models/Rating.js';
+import { calculateAverageScore } from '../utils/movieUtils.js';
 
 const getAllMovies = async (req, res) => {
     try {
         const movies = await Movie.getAll();
 
-        res.status(200).json(movies);
+        const moviesWithRatings = await Promise.all(
+            movies.map(async movie => {
+                const ratings = await Rating.getMovieRatingsWithDetails(movie.id);
+
+                let averageScore = calculateAverageScore(ratings);
+
+                return {
+                    ...movie,
+                    averageScore: averageScore,
+                    ratingsCount: ratings.length,
+                    ratings: ratings,
+                }
+            })
+        );
+
+        res.status(200).json(moviesWithRatings);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching movies' });
@@ -14,21 +30,14 @@ const getAllMovies = async (req, res) => {
 
 const getMovieById = async (req, res) => {
     try {
+        // resource retrieved from resourceExists middleware
         const movie = req.resource;
 
         // Get ratings for the movie
         const ratings = await Rating.getMovieRatingsWithDetails(movie.id);
 
         // Calculate average score
-        let averageScore = null;
-        if (ratings.length > 0) {
-            let ratingSum = 0;
-            for (const rating of ratings) {
-                ratingSum += rating.score;
-            }
-
-            averageScore = Math.round((ratingSum / ratings.length) * 10) / 10;
-        }
+        let averageScore = calculateAverageScore(ratings);
 
         res.status(200).json({
             ...movie,
