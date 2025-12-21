@@ -1,12 +1,12 @@
 import './main.css'
-import MovieList from './components/MovieList.jsx'
+import MoviesPage from './components/MoviesPage.jsx'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MovieList />} />
+                <Route path="/" element={<MoviesPage />} />
             </Routes>
         </BrowserRouter>
     )

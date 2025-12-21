@@ -14,6 +14,17 @@ class Movie {
         return await db.get(sql, params);
     }
 
+    static async getFiltersFormFields() {
+        return [
+            { type: 'checkbox', name: 'genres', value: 'comedy', checked: true },
+            { type: 'checkbox', name: 'genres', value: 'drama', checked: true },
+            { type: 'checkbox', name: 'genres', value: 'sci-fi', checked: true },
+            { type: 'checkbox', name: 'genres', value: 'action', checked: true },
+            { type: 'checkbox', name: 'genres', value: 'crime', checked: true },
+            { type: 'checkbox', name: 'genres', value: 'thriller', checked: true },
+        ]
+    }
+
     static async create(movie) {
         const sql = 'INSERT INTO movies (title, description, genre, director, release_date, runtime, poster_url) VALUES (?, ?, ?, ?, ?, ?, ?)';
         const params = [
