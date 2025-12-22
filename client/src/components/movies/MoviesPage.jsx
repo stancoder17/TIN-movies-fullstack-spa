@@ -3,7 +3,7 @@ import MoviesFilterFormBar from "./MoviesFilterFormBar.jsx";
 
 function MoviesPage() {
     return (
-        <main>
+        <>
             <div className="sidebar sidebar-left">
                 <h2 className="text-main">Filters</h2>
                 <hr className="separator"/>
@@ -14,7 +14,7 @@ function MoviesPage() {
             <div className="main-content">
                 <MovieList />
             </div>
-        </main>
+        </>
     );
 }
 

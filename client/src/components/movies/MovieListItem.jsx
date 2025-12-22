@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import './MovieList.css';
-import '../main.css'
-import { formatRatingScore } from '../utils/formatUtils.js';
+import '../../main.css'
+import { formatRatingScore } from '../../utils/formatUtils.js';
 
 function MovieListItem({ movie }) {
     const releaseYear = new Date(movie.release_date).getFullYear();

@@ -45,6 +45,32 @@ const getAllMovies = async (req, res) => {
     }
 }
 
+const getTopMoviesByRating = async (req, res) => {
+    try {
+        const count = parseInt(req.params.count);
+
+        if (isNaN(count) || count <= 0) {
+            return res.status(400).json({ message: 'Count must be a positive integer' });
+        }
+
+        const movies = await Movie.getTopByRating(count);
+        res.status(200).json(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching top movies' });
+    }
+}
+
+const getMovieFilterFormFields = async (req, res) => {
+    try {
+        const result = await Movie.getFilterFormFields();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching movie filter form fields' });
+    }
+}
+
 const getMovieById = async (req, res) => {
     try {
         // resource retrieved from resourceExists middleware
@@ -65,16 +91,6 @@ const getMovieById = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching movie' });
-    }
-}
-
-const getMovieFilterFormFields = async (req, res) => {
-    try {
-        const result = await Movie.getFilterFormFields();
-        res.status(200).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error while fetching movie filter form fields' });
     }
 }
 
@@ -115,4 +131,4 @@ const deleteMovie = async (req, res) => {
     }
 }
 
-export { getAllMovies, getMovieFilterFormFields, getMovieById, createMovie, updateMovie, deleteMovie };
+export { getAllMovies, getMovieFilterFormFields, getTopMoviesByRating, getMovieById, createMovie, updateMovie, deleteMovie };

@@ -32,6 +32,7 @@ function MoviesFilterFormBar() {
         // Build query string and navigate to new URL
         const params = new URLSearchParams();
 
+        // Example: genres=action&genres=comedy...
         if (genres.length > 0) {
             genres.forEach(genre => params.append('genres', genre));
         }
@@ -45,7 +46,7 @@ function MoviesFilterFormBar() {
         }
 
         // Navigate to URL with query params
-        navigate(`/?${params.toString()}`);
+        navigate(`/movies?${params.toString()}`);
     }
 
     return (

@@ -38,6 +38,20 @@ class Movie {
         return await db.get(sql, params);
     }
 
+    static async getTopByRating(count) {
+        const sql = `
+            SELECT m.id, m.title, AVG(r.score) as average_rating
+            FROM movies m
+            LEFT JOIN ratings r ON m.id = r.movie_id
+            GROUP BY m.id, m.title
+            ORDER BY average_rating DESC, m.title ASC
+            LIMIT ?
+        `;
+        const params = [count];
+
+        return await db.all(sql, params);
+    }
+
     static async getFilterFormFields() {
         const minDate = new Date(movieConstraints.releaseDate.earliest).getFullYear();
         const maxDate = new Date().getFullYear();
