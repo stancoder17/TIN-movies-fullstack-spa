@@ -8,7 +8,7 @@ function MovieListItem({ movie }) {
     const averageScore = formatRatingScore(movie.averageScore)
 
     return (
-        <Link className="media-block" to={`/api/movies/${movie.id}`}>
+        <Link className="media-block" to={`/movies/${movie.id}`}>
             <img className="media-poster" src={movie.poster_url || "../images/posters/default.jpg"} alt={`${movie.title} poster`}/>
 
             <div className="media-summary">
