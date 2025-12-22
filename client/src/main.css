@@ -521,7 +521,7 @@ select {
     height: 50px;
 }
 
-.admin-panel {
+.user-panel {
     display: flex;
     align-items: center;
     gap: var(--space-l);
