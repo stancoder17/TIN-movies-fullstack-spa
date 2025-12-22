@@ -23,7 +23,8 @@ CREATE TABLE movies
     director     VARCHAR(100) NOT NULL,
     release_date DATE         NOT NULL,
     runtime      INT          NOT NULL,
-    poster_url   VARCHAR(500) NOT NULL
+    poster_url   VARCHAR(500) NOT NULL,
+    youtube_html_url  VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE ratings
@@ -48,18 +49,18 @@ VALUES
         ('TheGrumpyCritic', 'critical.mark@example.com',  '5906ac361a137e2d286465cd6588ebb5ac3f5ae955001100bc41577c3d751764', 'https://cdn.pfps.gg/pfps/9038-funny-star-wars.png', '1985-03-30', '2020-01-20','Movies are the best, but most blockbusters are overrated'),
         ('xX_MovieLover_Xx', 'jessica.k@example.com','b97873a40f73abedd8d685a7cd5e5f85e4a9cfb83eac26886640a0813850122b','https://preview.redd.it/monke-image-dump-19-v0-lgarrkehrnsa1.jpg?width=1280&format=pjpg&auto=webp&s=9369c4fee3f03b9ad7a36ed6b73e1b70c1649b9f','2003-07-15', '2025-09-23', 'Here for a good time! I love Star Wars, no-brainers and popcorn. Dont ask me about plot holes lol.');
 
-
-INSERT INTO movies (title, description, genre, director, release_date, runtime, poster_url)
+INSERT INTO movies (title, description, genre, director, release_date, runtime, poster_url, youtube_html_url)
 VALUES
-        ('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 'sci-fi', 'Christopher Nolan', '2010-07-16', 148, 'https://image.tmdb.org/t/p/original/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg'),('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 'drama', 'Frank Darabont', '1994-09-22', 142, 'https://image.tmdb.org/t/p/original/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg'),
-        ('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 'crime', 'Francis Ford Coppola', '1972-03-24', 175, 'https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg'),
-        ('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.', 'crime', 'Quentin Tarantino', '1994-10-14', 154, 'https://image.tmdb.org/t/p/original/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg'),
-        ('The Dark Knight', 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.', 'action', 'Christopher Nolan', '2008-07-18', 152, 'https://image.tmdb.org/t/p/original/qJ2tW6WMUDux911r6m7haRef0WH.jpg'),
-        ('Forrest Gump', 'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate and other historical events unfold from the perspective of an Alabama man with an IQ of 75.', 'drama', 'Robert Zemeckis', '1994-07-06', 142, 'https://image.tmdb.org/t/p/original/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg'),
-        ('Fight Club', 'An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.', 'drama', 'David Fincher', '1999-10-15', 139, 'https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg'),
-        ('The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 'sci-fi', 'Lana Wachowski, Lilly Wachowski', '1999-03-31', 136, 'https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg'),
-        ('Interstellar', 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity''s survival.', 'sci-fi', 'Christopher Nolan', '2014-11-07', 169, 'https://tse2.mm.bing.net/th/id/OIP.uiaj_IMaC7h3NoieAhcmVwHaLG?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3'),
-        ('Parasite', 'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.', 'thriller', 'Bong Joon Ho', '2019-05-30', 132, 'https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg');
+        ('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 'sci-fi', 'Christopher Nolan', '2010-07-16', 148, 'https://image.tmdb.org/t/p/original/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg', 'https://www.youtube.com/embed/YoHD9XEInc0'),
+        ('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 'drama', 'Frank Darabont', '1994-09-22', 142, 'https://image.tmdb.org/t/p/original/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg', 'https://www.youtube.com/embed/PLl99DlL6b4'),
+        ('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 'crime', 'Francis Ford Coppola', '1972-03-24', 175, 'https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg', 'https://www.youtube.com/embed/UaVTIH8mujA'),
+        ('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.', 'crime', 'Quentin Tarantino', '1994-10-14', 154, 'https://image.tmdb.org/t/p/original/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg', 'https://www.youtube.com/embed/s7EdQ4FqbhY'),
+        ('The Dark Knight', 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.', 'action', 'Christopher Nolan', '2008-07-18', 152, 'https://image.tmdb.org/t/p/original/qJ2tW6WMUDux911r6m7haRef0WH.jpg', 'https://www.youtube.com/embed/EXeTwQWrcwY'),
+        ('Forrest Gump', 'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate and other historical events unfold from the perspective of an Alabama man with an IQ of 75.', 'drama', 'Robert Zemeckis', '1994-07-06', 142, 'https://image.tmdb.org/t/p/original/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg', 'https://www.youtube.com/embed/bLvqoHBptjg'),
+        ('Fight Club', 'An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.', 'drama', 'David Fincher', '1999-10-15', 139, 'https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg', 'https://www.youtube.com/embed/qtRKdVHc-cE'),
+        ('The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 'sci-fi', 'Lana Wachowski, Lilly Wachowski', '1999-03-31', 136, 'https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg', 'https://www.youtube.com/embed/vKQi3bBA1y8'),
+        ('Interstellar', 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity''s survival.', 'sci-fi', 'Christopher Nolan', '2014-11-07', 169, 'https://tse2.mm.bing.net/th/id/OIP.uiaj_IMaC7h3NoieAhcmVwHaLG?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3', 'https://www.youtube.com/embed/zSWdZVtXT7E'),
+        ('Parasite', 'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.', 'thriller', 'Bong Joon Ho', '2019-05-30', 132, 'https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg', 'https://www.youtube.com/embed/5xH0HfJHsaY');
 
 
 INSERT INTO ratings (user_id, movie_id, score, comment)
