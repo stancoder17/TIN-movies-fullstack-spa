@@ -1,4 +1,4 @@
-import ratingConstraints from '../config/constraints/ratingConstraints.js'
+import ratingConstraints from '../../utils/constraints/ratingConstraints.js'
 
 // ============================================================================
 // MAIN VALIDATION FUNCTION
@@ -8,8 +8,8 @@ const validateRating = (req, res, next) => {
     const rating = req.body;
     const errors = [];
 
-    validateUserId(rating.user_id, errors);
-    validateMovieId(rating.movie_id, errors);
+    // validateUserId(rating.user_id, errors);
+    // validateMovieId(rating.movie_id, errors);
     validateScore(rating.score, errors);
     validateComment(rating.comment, errors);
 

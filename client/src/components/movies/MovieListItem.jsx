@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom";
-import './MovieList.css';
-import '../../main.css'
 import { formatRatingScore } from '../../utils/formatUtils.js';
+import ratingConstraints from '../../../../utils/constraints/ratingConstraints.js';
 
 function MovieListItem({ movie }) {
     const releaseYear = new Date(movie.release_date).getFullYear();
@@ -22,9 +21,9 @@ function MovieListItem({ movie }) {
                 <h1>
                     <span className="rating-stars">★</span>
                     <span className="rating-score">{averageScore}</span>
-                    <span className="rating-scale">/10</span>
+                    <span className="rating-scale">/{ratingConstraints.score.max}</span>
                 </h1>
-                <h2 className="text-main">{movie.ratingsCount || 0} rating(s)</h2>
+                <h2 className="text-main">{movie.count || 0} rating(s)</h2>
             </div>
         </Link>
     );

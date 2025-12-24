@@ -1,4 +1,4 @@
-import movieConstraints from '../config/constraints/movieConstraints.js'
+import movieConstraints from '../../utils/constraints/movieConstraints.js'
 
 // ============================================================================
 // MAIN VALIDATION FUNCTION

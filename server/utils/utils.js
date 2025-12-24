@@ -1,8 +1,6 @@
 const calculateAverageScore = (ratings) => {
-    let averageScore = null;
-
     if (ratings.length === 0) {
-        return averageScore;
+        return 'N/A';
     }
 
     let ratingSum = 0;

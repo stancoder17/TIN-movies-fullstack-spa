@@ -1,5 +1,5 @@
 import db from '../config/database/db.js';
-import movieConstraints from '../config/constraints/movieConstraints.js';
+import movieConstraints from '../../utils/constraints/movieConstraints.js';
 
 class Movie {
     static async getAll(filters = {}) {

@@ -1,4 +1,4 @@
-import userConstraints from '../config/constraints/userConstraints.js'
+import userConstraints from '../../utils/constraints/userConstraints.js'
 
 // ============================================================================
 // MAIN VALIDATION FUNCTION

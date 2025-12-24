@@ -23,24 +23,25 @@ class Rating {
             rating.comment
         ];
 
-        const result = await db.run(sql, params);
+        await db.run(sql, params);
 
         // Return created rating
-        return Rating.getById(result.lastId);
+        return Rating.getById(id);
     }
 
     static async update(id, rating) {
-        const sql = 'UPDATE ratings SET score = ?, comment = ? WHERE id = ?';
+        const sql = 'UPDATE ratings SET score = ?, comment = ?, edited = ? WHERE id = ?';
         const params = [
             rating.score,
             rating.comment,
+            rating.edited,
             id
         ];
 
-        const result = await db.run(sql, params);
+        await db.run(sql, params);
 
         // Return updated rating
-        return Rating.getById(result.lastId);
+        return Rating.getById(id);
     }
 
     static async delete(id) {

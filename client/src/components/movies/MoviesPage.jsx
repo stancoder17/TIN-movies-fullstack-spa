@@ -1,5 +1,6 @@
 import MovieList from "./MovieList.jsx";
 import MoviesFilterFormBar from "./MoviesFilterFormBar.jsx";
+import './MoviesPage.css';
 
 function MoviesPage() {
     return (

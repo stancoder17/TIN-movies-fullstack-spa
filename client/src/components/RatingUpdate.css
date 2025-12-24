@@ -1,0 +1,32 @@
+.media-poster:hover {
+    scale: 1;
+}
+
+.media-rating input {
+    background-color: var(--color-main-navy);
+    color: var(--color-text-light);
+    text-align: center;
+    width: 50px;
+    height: 35px;
+}
+
+form.comment {
+    align-items: stretch;
+}
+
+.comment-body {
+    flex: 1 1 auto;
+    display: flex;
+}
+
+.comment-body textarea {
+    flex: 1 1 auto;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+}
+
+form {
+    width: auto;
+}

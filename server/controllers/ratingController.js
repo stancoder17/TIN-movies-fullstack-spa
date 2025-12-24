@@ -1,5 +1,6 @@
 import Rating from '../models/Rating.js';
-import ratingConstraints from '../config/constraints/ratingConstraints.js';
+import ratingConstraints from '../../utils/constraints/ratingConstraints.js';
+import {calculateAverageScore} from "../utils/utils.js";
 
 const getAllRatings = async (req, res) => {
     try {
@@ -46,13 +47,13 @@ const createRating = async (req, res) => {
 const updateRating = async (req, res) => {
     try {
         const id = req.params.id;
-        const { score, comment } = req.body;
+        let { score, comment, edited } = req.body;
 
         // Round score to the specified decimal places
         const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces)
-        const scoreRounded = Math.round(score * multiplier) / multiplier;
+        score = Math.round(score * multiplier) / multiplier;
 
-        const ratingData = { scoreRounded, comment };
+        const ratingData = { score, comment, edited };
         const result = await Rating.update(id, ratingData);
         res.status(200).json(result);
     } catch (error) {
@@ -73,4 +74,21 @@ const deleteRating = async (req, res) => {
     }
 }
 
-export { getAllRatings, getRatingById, createRating, updateRating, deleteRating };
+const getMovieRatingsWithDetails = async (req, res) => {
+    try {
+        const movieId = req.params.id;
+        const ratings = await Rating.getMovieRatingsWithDetails(movieId);
+
+        const averageScore = calculateAverageScore(ratings);
+
+        res.status(200).json({
+            ratingsList: ratings,
+            averageScore: averageScore
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching movie ratings' });
+    }
+}
+
+export { getAllRatings, getRatingById, createRating, updateRating, deleteRating, getMovieRatingsWithDetails };

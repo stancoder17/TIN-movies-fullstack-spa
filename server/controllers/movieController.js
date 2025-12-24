@@ -1,6 +1,6 @@
 import Movie from '../models/Movie.js';
 import Rating from '../models/Rating.js';
-import { calculateAverageScore } from '../utils/movieUtils.js';
+import { calculateAverageScore } from '../utils/utils.js';
 
 const getAllMovies = async (req, res) => {
     try {
@@ -25,15 +25,15 @@ const getAllMovies = async (req, res) => {
 
         const moviesWithRatings = await Promise.all(
             movies.map(async movie => {
-                const ratings = await Rating.getMovieRatingsWithDetails(movie.id);
+                const ratings = await Rating.getByMovieId(movie.id);
 
                 let averageScore = calculateAverageScore(ratings);
 
                 return {
                     ...movie,
                     averageScore: averageScore,
-                    ratingsCount: ratings.length,
-                    ratings: ratings,
+                    count: ratings.length,
+                    ratingsList: ratings,
                 }
             })
         );
@@ -85,8 +85,8 @@ const getMovieById = async (req, res) => {
         res.status(200).json({
             ...movie,
             averageScore: averageScore,
-            ratingsCount: ratings.length,
-            ratings: ratings
+            count: ratings.length,
+            ratingsList: ratings
         });
     } catch (error) {
         console.error(error);

@@ -35,6 +35,7 @@ CREATE TABLE ratings
     score      DECIMAL(3, 1)                      NOT NULL CHECK (score >= 1.0 AND score <= 10.0),
     comment    TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    edited BOOL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (movie_id) REFERENCES movies (id) ON DELETE CASCADE,
     UNIQUE (user_id, movie_id)

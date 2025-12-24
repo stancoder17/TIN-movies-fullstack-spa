@@ -1,7 +1,6 @@
 import MainButtons from './MainButtons.jsx';
 import AdminButtons from './AdminButtons.jsx';
 import WelcomeUser from './WelcomeUser.jsx';
-import '../../main.css';
 
 function Header() {
     return (

@@ -22,8 +22,8 @@ const getUserById = async (req, res) => {
 
         res.status(200).json({
             ...user,
-            ratingsCount : ratings.length,
-            ratings: ratings
+            count : ratings.length,
+            ratingsList: ratings
         });
     } catch (error) {
         console.error(error);

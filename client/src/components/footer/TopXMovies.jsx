@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import '../../main.css'
 
 function TopXMovies() {
     const [movies, setMovies] = useState([])
