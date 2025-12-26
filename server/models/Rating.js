@@ -24,9 +24,6 @@ class Rating {
         ];
 
         await db.run(sql, params);
-
-        // Return created rating
-        return Rating.getById(id);
     }
 
     static async update(id, rating) {
@@ -39,9 +36,6 @@ class Rating {
         ];
 
         await db.run(sql, params);
-
-        // Return updated rating
-        return Rating.getById(id);
     }
 
     static async delete(id) {
@@ -72,7 +66,7 @@ class Rating {
         return await db.get(sql, params);
     }
 
-    static async getMovieRatingsWithDetails(movieId) {
+    static async getWithUserInfo(movieId) {
         const sql = `
             SELECT 
                 r.id,
@@ -93,7 +87,7 @@ class Rating {
         return await db.all(sql, params);
     }
 
-    static async getUserRatingsWithDetails(userId) {
+    static async getWithMovieInfo(userId) {
         const sql = `
             SELECT 
                 r.id,

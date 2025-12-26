@@ -97,8 +97,8 @@ const validateScore = (score, errors) => {
     // Example: 1.3 - 1.0 = 0.3; 0.3 % 0.3 = 0 -> valid
     // without subtraction: 1.3 % 0.3 != 0 -> invalid
     // then the score is multiplied to prevent floating-point division
-    const dividend = (scoreNum - ratingConstraints.score.min) * 10 * ratingConstraints.score.max;
-    const divisor = ratingConstraints.score.increment * 10 * ratingConstraints.score.max;
+    const dividend = Math.round((scoreNum - ratingConstraints.score.min) * 10 * ratingConstraints.score.max);
+    const divisor = Math.round(ratingConstraints.score.increment * 10 * ratingConstraints.score.max);
     if (dividend % divisor !== 0) {
         errors.push('Score must be in increments of ' + ratingConstraints.score.increment);
     }

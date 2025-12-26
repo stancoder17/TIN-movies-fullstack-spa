@@ -77,7 +77,7 @@ const getMovieById = async (req, res) => {
         const movie = req.resource;
 
         // Get ratings for the movie
-        const ratings = await Rating.getMovieRatingsWithDetails(movie.id);
+        const ratings = await Rating.getWithUserInfo(movie.id);
 
         // Calculate average score
         let averageScore = calculateAverageScore(ratings);
@@ -98,8 +98,8 @@ const createMovie = async (req, res) => {
     try {
         const movie = req.body;
 
-        const result = await Movie.create(movie);
-        res.status(201).json(result);
+        await Movie.create(movie);
+        res.status(201).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while creating movie' });
@@ -111,8 +111,8 @@ const updateMovie = async (req, res) => {
         const id = req.params.id;
         const updatedMovie = req.body;
 
-        const result = await Movie.update(id, updatedMovie);
-        res.status(200).json(result);
+        await Movie.update(id, updatedMovie);
+        res.status(204).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while updating movie' });

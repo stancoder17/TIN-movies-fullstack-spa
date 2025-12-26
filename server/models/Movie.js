@@ -82,10 +82,7 @@ class Movie {
             movie.poster_url
         ];
 
-        const result = await db.run(sql, params);
-
-        // Return created movie
-        return Movie.getById(result.lastId);
+        await db.run(sql, params);
     }
 
     static async update(id, movie) {
@@ -101,10 +98,7 @@ class Movie {
             id
         ];
 
-        const result = await db.run(sql, params);
-
-        // Return updated movie
-        return Movie.getById(result.lastID);
+        await db.run(sql, params);
     }
 
     static async delete(id) {

@@ -1,6 +1,5 @@
 import Rating from '../models/Rating.js';
-import ratingConstraints from '../../utils/constraints/ratingConstraints.js';
-import {calculateAverageScore} from "../utils/utils.js";
+import {calculateAverageScore, roundScore} from "../utils/utils.js";
 
 const getAllRatings = async (req, res) => {
     try {
@@ -27,13 +26,11 @@ const createRating = async (req, res) => {
     try {
         const { user_id, movie_id, score, comment } = req.body;
 
-        // Round score to the specified decimal places
-        const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces)
-        const scoreRounded = Math.round(score * multiplier) / multiplier;
+        const scoreRounded = roundScore(score);
 
-        const ratingData = { user_id, movie_id, scoreRounded, comment };
-        const result = await Rating.create(ratingData);
-        res.status(201).json(result);
+        const ratingData = { user_id, movie_id, score: scoreRounded, comment };
+        await Rating.create(ratingData);
+        res.status(201).end();
     } catch (error) {
         if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE')) {
             return res.status(409).json({message: 'Rating for this user and movie already exists'});
@@ -49,13 +46,11 @@ const updateRating = async (req, res) => {
         const id = req.params.id;
         let { score, comment, edited } = req.body;
 
-        // Round score to the specified decimal places
-        const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces)
-        score = Math.round(score * multiplier) / multiplier;
+        score = roundScore(score);
 
         const ratingData = { score, comment, edited };
-        const result = await Rating.update(id, ratingData);
-        res.status(200).json(result);
+        await Rating.update(id, ratingData);
+        res.status(204).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while updating rating' });
@@ -77,7 +72,7 @@ const deleteRating = async (req, res) => {
 const getMovieRatingsWithDetails = async (req, res) => {
     try {
         const movieId = req.params.id;
-        const ratings = await Rating.getMovieRatingsWithDetails(movieId);
+        const ratings = await Rating.getWithUserInfo(movieId);
 
         const averageScore = calculateAverageScore(ratings);
 

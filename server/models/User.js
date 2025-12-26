@@ -45,9 +45,7 @@ class User {
             userData.date_of_birth,
             userData.bio
         ];
-        const result = await db.run(sql, params);
-
-        return await User.getById(result.lastID);
+        await db.run(sql, params);
     }
 
     static async update(id, userData) {
@@ -65,8 +63,6 @@ class User {
             id
         ];
         await db.run(sql, params);
-
-        return await User.getById(id);
     }
 
     static async delete(id) {

@@ -1,3 +1,5 @@
+import ratingConstraints from '../../utils/constraints/ratingConstraints.js';
+
 const calculateAverageScore = (ratings) => {
     if (ratings.length === 0) {
         return 'N/A';
@@ -11,4 +13,9 @@ const calculateAverageScore = (ratings) => {
     return Math.round((ratingSum / ratings.length) * 10) / 10;
 }
 
-export { calculateAverageScore };
+const roundScore = (score) => {
+    const multiplier = Math.pow(10, ratingConstraints.score.decimalPlaces);
+    return Math.round(score * multiplier) / multiplier;
+}
+
+export { calculateAverageScore, roundScore };

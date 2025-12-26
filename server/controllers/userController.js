@@ -33,8 +33,8 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const result = await User.create(req.body);
-        res.status(201).json(result);
+        await User.create(req.body);
+        res.status(201).end();
     } catch (error) {
         if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE')) {
             return res.status(409).json({message: 'User with this email already exists'});
@@ -50,8 +50,8 @@ const updateUser = async (req, res) => {
         const id = req.params.id;
 
         const updatedUser = req.body;
-        const result = await User.update(id, updatedUser);
-        res.status(200).json(result);
+        await User.update(id, updatedUser);
+        res.status(204).end();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while updating user' });
