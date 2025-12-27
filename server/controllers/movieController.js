@@ -98,8 +98,8 @@ const createMovie = async (req, res) => {
     try {
         const movie = req.body;
 
-        await Movie.create(movie);
-        res.status(201).end();
+        const result = await Movie.create(movie);
+        res.status(201).json({ id: result.id });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while creating movie' });
@@ -131,4 +131,14 @@ const deleteMovie = async (req, res) => {
     }
 }
 
-export { getAllMovies, getMovieFilterFormFields, getTopMoviesByRating, getMovieById, createMovie, updateMovie, deleteMovie };
+const getMovieCreateFormFields = async (req, res) => {
+    try {
+        const fields = await Movie.getCreateFormFields();
+        res.status(200).json(fields);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching create form fields' });
+    }
+}
+
+export { getAllMovies, getMovieFilterFormFields, getTopMoviesByRating, getMovieById, createMovie, updateMovie, deleteMovie, getMovieCreateFormFields };

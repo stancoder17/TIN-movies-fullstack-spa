@@ -15,6 +15,7 @@ const validateMovie = (req, res, next) => {
     validateReleaseDate(movie.release_date, errors);
     validateRuntime(movie.runtime, errors);
     validatePosterUrl(movie.poster_url, errors);
+    validateYoutubeHtmlUrl(movie.youtube_html_url, errors);
 
     if (errors.length > 0) {
         return res.status(400).json({
@@ -45,7 +46,6 @@ const validateTitle = (title, errors) => {
         return;
     }
 
-    const trimmedTitle = title.trim();
     if (title.length < movieConstraints.title.minLength || title.length > movieConstraints.title.maxLength) {
         errors.push(`Title must be between ${movieConstraints.title.minLength} and ${movieConstraints.title.maxLength} characters long`);
     }
@@ -162,6 +162,25 @@ const validatePosterUrl = (posterUrl, errors) => {
 
     if (!movieConstraints.posterUrl.pattern.test(posterUrl)) {
         errors.push('Poster URL must be a valid URL starting with http:// or https://');
+    }
+}
+
+const validateYoutubeHtmlUrl = (youtubeHtmlUrl, errors) => {
+    const required = movieConstraints.youtubeHtmlUrl.required;
+
+    if (!youtubeHtmlUrl) {
+        if (required) {
+            errors.push('YouTube HTML URL is required');
+        }
+        return;
+    }
+
+    if (youtubeHtmlUrl.length < movieConstraints.youtubeHtmlUrl.minLength || youtubeHtmlUrl.length > movieConstraints.youtubeHtmlUrl.maxLength) {
+        errors.push(`YouTube HTML URL must be between ${movieConstraints.youtubeHtmlUrl.minLength} and ${movieConstraints.youtubeHtmlUrl.maxLength} characters long`);
+    }
+
+    if (!movieConstraints.youtubeHtmlUrl.pattern.test(youtubeHtmlUrl)) {
+        errors.push('YouTube HTML URL must be a valid YouTube embed URL (e.g., https://www.youtube.com/embed/VIDEO_ID)');
     }
 }
 

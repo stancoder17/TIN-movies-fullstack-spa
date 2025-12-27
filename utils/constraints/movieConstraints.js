@@ -33,6 +33,12 @@ const movieConstraints = {
         minLength: 0,
         maxLength: 2083,
         pattern: /^https?:\/\/.+/i
+    },
+    youtubeHtmlUrl: {
+        required: true,
+        minLength: 0,
+        maxLength: 2083,
+        pattern: /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+$/i
     }
 }
 

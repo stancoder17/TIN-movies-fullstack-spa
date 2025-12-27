@@ -2,7 +2,7 @@ import ratingConstraints from '../../utils/constraints/ratingConstraints.js';
 
 const calculateAverageScore = (ratings) => {
     if (ratings.length === 0) {
-        return 'N/A';
+        return null;
     }
 
     let ratingSum = 0;

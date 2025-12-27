@@ -12,7 +12,10 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/movies" element={<MoviesPage />} />
+                    <Route path="/movies/add" element={<MovieCreateOrUpdate beingEdited={false} />} />
                     <Route path="/movies/:id" element={<MovieDetails />} />
+                    <Route path="/movies/:id/edit" element={<MovieCreateOrUpdate beingEdited={true} />} />
+                    <Route path="/users" element={<UserList />} />
                     <Route path="*" element={<h1 className='text-main'>404 Not Found</h1>} />
                 </Routes>
             </main>

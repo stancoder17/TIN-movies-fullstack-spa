@@ -1,0 +1,52 @@
+
+main {
+    background-color: var(--color-main-navy);
+    padding: 50px 50px 100px;
+}
+
+button.wide {
+    width: 60%;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: auto;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0;
+    background: var(--color-main-navy-dark);
+    box-shadow: none;
+}
+
+.form-input {
+    background: var(--color-main-navy);
+    width: auto;
+}
+
+.form-input-description {
+    width: 700px;
+    height: 150px;
+}
+
+.form-buttons-etc {
+    margin-top: var(--space-m);
+}
+
+input {
+    color: var(--color-text);
+}
+
+input[type="file"] {
+    width: 275px;
+}
+
+input[type=date]{
+    width: 150px;
+}
