@@ -3,6 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import './MovieDetails.css';
 import RatingsList from "./RatingsList.jsx";
 import ratingConstraints from '../../../../utils/constraints/ratingConstraints.js';
+import {formatDate} from "../../utils/formatUtils.js";
 
 function MovieDetails() {
     const navigate = useNavigate();
@@ -120,7 +121,7 @@ function MovieDetails() {
                             <h1 className="text-main">{movie.title}</h1>
                             <h4 className="text-accent">
                                 <span>• {movie.genre.charAt(0).toUpperCase() + movie.genre.slice(1)}</span>
-                                <span>• Release date: {movie.release_date} </span>
+                                <span>• Release date: {formatDate(movie.release_date)} </span>
                             </h4>
                         </div>
 

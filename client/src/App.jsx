@@ -4,6 +4,8 @@ import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './main.css';
+import MovieCreateOrUpdate from "./components/movie-add/MovieAddOrEdit.jsx";
+import UserList from "./components/users/UserList.jsx";
 
 function App() {
     return (

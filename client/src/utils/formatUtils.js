@@ -7,4 +7,24 @@ const formatRatingScore = (score) => {
     return Number.isInteger(score) ? Math.round(score) : rounded;
 };
 
-export { formatRatingScore };
+// Format date to locale string
+// Pass options object to customize format
+const formatDate = (dateString, options = {}) => {
+    if (!dateString) return 'N/A';
+
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) return 'Invalid Date';
+
+    // Default options for date only (no time)
+    const defaultOptions = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        ...options
+    };
+
+    return date.toLocaleString(undefined, defaultOptions);
+};
+
+export { formatRatingScore, formatDate };

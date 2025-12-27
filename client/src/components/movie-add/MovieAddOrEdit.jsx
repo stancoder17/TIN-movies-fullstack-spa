@@ -18,7 +18,7 @@ function MovieAddOrEdit({beingEdited = false}) {
         : 'http://localhost:5000/api/movies';
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/movies/create-fields')
+        fetch('http://localhost:5000/api/movies/create-or-update-fields')
             .then(response => response.json())
             .then(data => setFields(data))
             .catch(error => console.error('Error fetching movie form fields:', error));

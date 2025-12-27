@@ -5,7 +5,17 @@ const getAllUsers = async (req, res) => {
     try {
         const users = await User.getAll();
 
-        res.status(200).json(users);
+        const usersWithRatings = await Promise.all(
+            users.map(async user => {
+                const ratings = await Rating.getByUserId(user.id);
+                return {
+                    ...user,
+                    ratingsCount: ratings.length
+                };
+            })
+        );
+
+        res.status(200).json(usersWithRatings);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching users' });

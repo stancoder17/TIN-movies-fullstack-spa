@@ -3,6 +3,7 @@ import {useState} from "react";
 import './Movie_RatingUpdate.css';
 import '../RatingUpdate.css';
 import ratingConstraints from "../../../../utils/constraints/ratingConstraints.js";
+import {formatDate} from "../../utils/formatUtils.js";
 
 // This component is both for viewing and editing a rating
 function RatingListItem({ rating, handleDelete, handleUpdate }) {
@@ -69,7 +70,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                     </div>
 
                     <div>
-                        <h4 className="date">{new Date(rating.created_at).toLocaleDateString()}</h4>
+                        <h4 className="date">{formatDate(rating.created_at)}</h4>
                         {rating.edited && <h4 className="text-main">(edited)</h4> }
                     </div>
                 </div>
