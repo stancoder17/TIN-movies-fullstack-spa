@@ -33,6 +33,16 @@ const getUserById = async (req, res) => {
     }
 }
 
+const getUpdateFormFields = async (req, res) => {
+    try {
+        const result = await User.getUpdateFormFields();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching user update form fields' });
+    }
+}
+
 const createUser = async (req, res) => {
     try {
         await User.create(req.body);
@@ -50,9 +60,14 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const id = req.params.id;
-
         const updatedUser = req.body;
-        await User.update(id, updatedUser);
+
+        let passwordProvided = false;
+        if (updatedUser.password && updatedUser.password.trim() !== '') {
+            passwordProvided = true;
+        }
+
+        await User.update(id, updatedUser, passwordProvided);
         res.status(204).end();
     } catch (error) {
         console.error(error);
@@ -73,4 +88,4 @@ const deleteUser = async (req, res) => {
 }
 
 
-export { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+export { getAllUsers, getUserById, getUpdateFormFields, createUser, updateUser, deleteUser };

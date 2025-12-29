@@ -10,7 +10,7 @@ const validateUser = (req, res, next) => {
 
     validateNickname(user.nickname, errors);
     validateEmail(user.email, errors);
-    validatePassword(user.password, errors);
+    validatePassword(user.password, req.method, errors);
     validateProfilePictureUrl(user.profile_picture_url, errors);
     validateDateOfBirth(user.date_of_birth, errors);
     validateBio(user.bio, errors);
@@ -63,8 +63,9 @@ const validateEmail = (email, errors) => {
     }
 }
 
-const validatePassword = (password, errors) => {
-    const required = userConstraints.password.required;
+const validatePassword = (password, method, errors) => {
+    // Password is not required when updating User
+    const required = method === 'PUT' ? false : userConstraints.password.required;
 
     if (!password) {
         if (required) {
