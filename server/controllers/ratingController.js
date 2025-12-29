@@ -1,5 +1,5 @@
 import Rating from '../models/Rating.js';
-import {calculateAverageScore, roundScore} from "../utils/utils.js";
+import {calculateAverageScore, roundScore} from "../../utils/utils.js";
 
 const getAllRatings = async (req, res) => {
     try {
@@ -69,21 +69,28 @@ const deleteRating = async (req, res) => {
     }
 }
 
-const getMovieRatingsWithDetails = async (req, res) => {
+const getMovieRatingsWithUserInfo = async (req, res) => {
     try {
         const movieId = req.params.id;
-        const ratings = await Rating.getWithUserInfo(movieId);
 
-        const averageScore = calculateAverageScore(ratings);
-
-        res.status(200).json({
-            ratingsList: ratings,
-            averageScore: averageScore
-        });
+        const ratings = await Rating.getByMovieIdWithUserInfo(movieId);
+        res.status(200).json(ratings);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching movie ratings' });
     }
 }
 
-export { getAllRatings, getRatingById, createRating, updateRating, deleteRating, getMovieRatingsWithDetails };
+const getUserRatingsWithMovieInfo = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const ratings = await Rating.getByUserIdWithMovieInfo(userId);
+        res.status(200).json(ratings);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching user ratings' });
+    }
+}
+
+export { getAllRatings, getRatingById, createRating, updateRating, deleteRating, getMovieRatingsWithUserInfo, getUserRatingsWithMovieInfo };

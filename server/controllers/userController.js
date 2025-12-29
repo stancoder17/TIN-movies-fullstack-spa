@@ -24,17 +24,9 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        // resource retrieved from resourceExists middleware
+        // resource retrieved from 'resourceExists' middleware
         const user = req.resource;
-
-        // Get user's ratings
-        const ratings = await Rating.getByUserId(user.id);
-
-        res.status(200).json({
-            ...user,
-            count : ratings.length,
-            ratingsList: ratings
-        });
+        res.status(200).json(user);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching user' });

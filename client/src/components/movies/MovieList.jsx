@@ -4,7 +4,6 @@ import MovieListItem from "./MovieListItem.jsx";
 
 function MovieList() {
     const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
 
     useEffect(() => {
@@ -20,19 +19,19 @@ function MovieList() {
             .then(response => response.json())
             .then(data => {
                 setMovies(data);
-                setLoading(false);
             })
             .catch(error => {
                 console.error("Error fetching movies:", error);
-                setLoading(false);
             });
     }, [searchParams])
 
     return (
         <>
-            {movies.map((movie) => (
+            {movies.length > 0 ? movies.map((movie) => (
                 <MovieListItem key={movie.id} movie={movie} />
-            ))}
+            )) : (
+                <p className="text-main">No movies found.</p>
+            )}
         </>
     )
 }

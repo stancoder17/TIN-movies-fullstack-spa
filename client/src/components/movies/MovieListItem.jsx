@@ -4,7 +4,7 @@ import ratingConstraints from '../../../../utils/constraints/ratingConstraints.j
 
 function MovieListItem({ movie }) {
     const releaseYear = new Date(movie.release_date).getFullYear();
-    const averageScore = formatRatingScore(movie.averageScore)
+    const averageScore = formatRatingScore(movie.averageScore);
 
     return (
         <Link className="media-block" to={`/movies/${movie.id}`}>
@@ -23,7 +23,7 @@ function MovieListItem({ movie }) {
                     <span className="rating-score">{averageScore}</span>
                     <span className="rating-scale">/{ratingConstraints.score.max}</span>
                 </h1>
-                <h2 className="text-main">{movie.count || 0} rating(s)</h2>
+                <h2 className="text-main">{movie.ratingsList.length || 0} rating(s)</h2>
             </div>
         </Link>
     );

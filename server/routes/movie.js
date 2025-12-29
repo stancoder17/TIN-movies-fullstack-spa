@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllMovies, getMovieById, getMovieFilterFormFields, createMovie, updateMovie, deleteMovie, getTopMoviesByRating, getMovieCreateFormFields } from '../controllers/movieController.js';
-import {getMovieRatingsWithDetails} from "../controllers/ratingController.js";
+import {getMovieRatingsWithUserInfo} from "../controllers/ratingController.js";
 import validateMovie from '../middleware/movieValidation.js';
 import validateId from '../middleware/idValidation.js';
 import resourceExists from '../middleware/resourceExists.js';
@@ -12,7 +12,7 @@ router.get('/filter-fields', getMovieFilterFormFields);
 router.get('/create-or-update-fields', getMovieCreateFormFields);
 router.get('/top/:count', getTopMoviesByRating);
 router.get('/:id', validateId, resourceExists(Movie), getMovieById);
-router.get('/:id/ratings', validateId, resourceExists(Movie), getMovieRatingsWithDetails);
+router.get('/:id/ratings', validateId, resourceExists(Movie), getMovieRatingsWithUserInfo);
 router.post('/', validateMovie, createMovie);
 router.put('/:id', validateId, resourceExists(Movie), validateMovie, updateMovie);
 router.delete('/:id', validateId, resourceExists(Movie), deleteMovie);

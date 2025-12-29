@@ -66,7 +66,7 @@ class Rating {
         return await db.get(sql, params);
     }
 
-    static async getWithUserInfo(movieId) {
+    static async getByMovieIdWithUserInfo(movieId) {
         const sql = `
             SELECT 
                 r.id,
@@ -75,6 +75,7 @@ class Rating {
                 r.score,
                 r.comment,
                 r.created_at,
+                r.edited,
                 u.nickname,
                 u.profile_picture_url
             FROM ratings r
@@ -87,7 +88,7 @@ class Rating {
         return await db.all(sql, params);
     }
 
-    static async getWithMovieInfo(userId) {
+    static async getByUserIdWithMovieInfo(userId) {
         const sql = `
             SELECT 
                 r.id,
@@ -96,6 +97,7 @@ class Rating {
                 r.score,
                 r.comment,
                 r.created_at,
+                r.edited,
                 m.title,
                 m.poster_url
             FROM ratings r

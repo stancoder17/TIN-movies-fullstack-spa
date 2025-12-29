@@ -1,6 +1,6 @@
 import Movie from '../models/Movie.js';
 import Rating from '../models/Rating.js';
-import { calculateAverageScore } from '../utils/utils.js';
+import { calculateAverageScore } from '../../utils/utils.js';
 
 const getAllMovies = async (req, res) => {
     try {
@@ -32,7 +32,6 @@ const getAllMovies = async (req, res) => {
                 return {
                     ...movie,
                     averageScore: averageScore,
-                    count: ratings.length,
                     ratingsList: ratings,
                 }
             })
@@ -73,21 +72,9 @@ const getMovieFilterFormFields = async (req, res) => {
 
 const getMovieById = async (req, res) => {
     try {
-        // resource retrieved from resourceExists middleware
+        // resource retrieved from 'resourceExists' middleware
         const movie = req.resource;
-
-        // Get ratings for the movie
-        const ratings = await Rating.getWithUserInfo(movie.id);
-
-        // Calculate average score
-        let averageScore = calculateAverageScore(ratings);
-
-        res.status(200).json({
-            ...movie,
-            averageScore: averageScore,
-            count: ratings.length,
-            ratingsList: ratings
-        });
+        res.status(200).json(movie);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching movie' });

@@ -1,14 +1,17 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import './MovieDetails.css';
-import RatingsList from "./RatingsList.jsx";
+import RatingsList from "../common/RatingsList.jsx";
+import RatingListItem from "../common/RatingListItem.jsx";
 import ratingConstraints from '../../../../utils/constraints/ratingConstraints.js';
-import {formatDate} from "../../utils/formatUtils.js";
+import {formatDate, formatRatingScore} from "../../utils/formatUtils.js";
+import {calculateAverageScore} from "../../../../utils/utils.js";
 
 function MovieDetails() {
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [ratings, setRatings] = useState([]);
+    const [averageScore, setAverageScore] = useState(null);
     const { id } = useParams();
 
     useEffect(() => {
@@ -19,7 +22,10 @@ function MovieDetails() {
 
         fetch(`http://localhost:5000/api/movies/${id}/ratings`)
             .then(response => response.json())
-            .then(data => setRatings(data))
+            .then(data => {
+                setRatings(data);
+                setAverageScore(formatRatingScore(calculateAverageScore(data)));
+            })
             .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
     }, [id]);
 
@@ -30,9 +36,6 @@ function MovieDetails() {
 
         if (response.ok) {
             navigate('/movies');
-        } else {
-            const error = await response.json();
-            console.error('Error deleting movie:', error.message);
         }
     }
 
@@ -57,10 +60,13 @@ function MovieDetails() {
                 body: JSON.stringify(ratingData)
             });
 
-            if (response.ok) { // GET updated ratings list
+            if (response.ok) {
                 await fetch(`http://localhost:5000/api/movies/${id}/ratings`)
                     .then(res => res.json())
-                    .then(data => setRatings(data))
+                    .then(data => {
+                        setRatings(data);
+                        setAverageScore(formatRatingScore(calculateAverageScore(data)));
+                    })
                     .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
 
                 // Clear form
@@ -84,11 +90,10 @@ function MovieDetails() {
                 body: JSON.stringify(updatedRatingData)
             });
 
-            if (response.ok) { // GET updated ratings list
-                await fetch("http://localhost:5000/api/movies/" + id + "/ratings")
-                    .then(res => res.json())
-                    .then(data => setRatings(data))
-                    .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
+            if (response.ok) {
+                const newRatingsList = ratings.map(r => r.id === ratingId ? {...r, ...updatedRatingData} : r);
+                setRatings(newRatingsList);
+                setAverageScore(formatRatingScore(calculateAverageScore(newRatingsList)));
             }
         } catch (error) {
             console.error('Error updating rating:', error);
@@ -101,11 +106,10 @@ function MovieDetails() {
                 method: 'DELETE'
             });
 
-            if (response.ok) { // GET updated ratings list
-                await fetch("http://localhost:5000/api/movies/" + id + "/ratings")
-                    .then(res => res.json())
-                    .then(data => setRatings(data))
-                    .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
+            if (response.ok) {
+                const newRatingsList = ratings.filter(r => r.id !== ratingId);
+                setRatings(newRatingsList);
+                setAverageScore(formatRatingScore(calculateAverageScore(newRatingsList)));
             }
         } catch (error) {
             console.error('Error deleting rating:', error);
@@ -132,14 +136,14 @@ function MovieDetails() {
                                 </Link>
                                 <button className="btn-red" type="button" onClick={handleMovieDelete}>Delete</button>
                             </div>
-                            {ratings.averageScore && (
+                            {averageScore && (
                                 <div className="media-rating">
                                     <h1>
                                         <span className="rating-stars">★</span>
-                                        <span className="rating-score">{ratings.averageScore}</span>
+                                        <span className="rating-score">{averageScore}</span>
                                         <span className="rating-scale">/{ratingConstraints.score.max}</span>
                                     </h1>
-                                    <h2 className="text-main">{ratings.ratingsList.length} rating(s)</h2>
+                                    <h2 className="text-main">{ratings.length} rating(s)</h2>
                                 </div>
                             )}
                         </div>
@@ -161,7 +165,7 @@ function MovieDetails() {
 
                     <hr className="separator"/>
 
-                    <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} />
+                    <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} ItemComponent={RatingListItem} />
 
                     <div className="form-container">
                         <form onSubmit={handleRatingSubmit}>

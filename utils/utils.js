@@ -1,4 +1,4 @@
-import ratingConstraints from '../../utils/constraints/ratingConstraints.js';
+import ratingConstraints from './constraints/ratingConstraints.js';
 
 const calculateAverageScore = (ratings) => {
     if (ratings.length === 0) {
@@ -19,3 +19,4 @@ const roundScore = (score) => {
 }
 
 export { calculateAverageScore, roundScore };
+

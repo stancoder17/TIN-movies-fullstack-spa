@@ -6,6 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './main.css';
 import MovieCreateOrUpdate from "./components/movie-add/MovieAddOrEdit.jsx";
 import UserList from "./components/users/UserList.jsx";
+import UserDetails from "./components/user-details/UserDetails.jsx";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/movies/:id" element={<MovieDetails />} />
                     <Route path="/movies/:id/edit" element={<MovieCreateOrUpdate beingEdited={true} />} />
                     <Route path="/users" element={<UserList />} />
+                    <Route path="/users/:id" element={<UserDetails />} />
                     <Route path="*" element={<h1 className='text-main'>404 Not Found</h1>} />
                 </Routes>
             </main>

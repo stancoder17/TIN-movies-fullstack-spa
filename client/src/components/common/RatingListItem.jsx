@@ -1,13 +1,17 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import './Movie_RatingUpdate.css';
+import '../movie-details/Movie_RatingUpdate.css';
 import '../RatingUpdate.css';
 import ratingConstraints from "../../../../utils/constraints/ratingConstraints.js";
 import {formatDate} from "../../utils/formatUtils.js";
 
-// This component is both for viewing and editing a rating
+// Universal component for viewing and editing ratings (both for movie details and user profile)
 function RatingListItem({ rating, handleDelete, handleUpdate }) {
     const [beingEdited, setBeingEdited] = useState(false);
+
+    // Determine if this is a movie rating (has user info) or user rating (has movie info)
+    const isMovieRating = rating.nickname !== undefined;
+    const isUserRating = rating.title !== undefined;
 
     const onEditClick = () => {
         setBeingEdited(true);
@@ -35,23 +39,33 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
         handleDelete(rating.id);
     };
 
-
-    // <form> or <div> depending on whether beingEdited is true or false.
     const FormOrDiv = beingEdited ? 'form' : 'div';
 
     return (
         <div>
-            {// Pass 'onSubmit' function if beingEdited = true
-            }
             <FormOrDiv className="comment" onSubmit={beingEdited ? onSubmit : undefined}>
                 <div className="comment-header">
                     <div className="production-info">
-                        <Link to={`/users/${rating.user_id}`}>
-                            <img className="user-avatar" src={rating.profile_picture_url} alt="User avatar"/>
-                        </Link>
-                        <Link to={`/users/${rating.user_id}`}>
-                            <h3 className="text-main">{rating.nickname}</h3>
-                        </Link>
+                        {isMovieRating && (
+                            <>
+                                <Link to={`/users/${rating.user_id}`}>
+                                    <img className="user-avatar" src={rating.profile_picture_url} alt="User avatar"/>
+                                </Link>
+                                <Link to={`/users/${rating.user_id}`}>
+                                    <h3 className="text-main">{rating.nickname}</h3>
+                                </Link>
+                            </>
+                        )}
+                        {isUserRating && (
+                            <>
+                                <Link to={`/movies/${rating.movie_id}`}>
+                                    <img className="media-poster" src={rating.poster_url} alt={`${rating.title} poster`}/>
+                                </Link>
+                                <Link to={`/movies/${rating.movie_id}`}>
+                                    <h3 className="text-main">{rating.title}</h3>
+                                </Link>
+                            </>
+                        )}
                     </div>
 
                     <div className="media-rating">

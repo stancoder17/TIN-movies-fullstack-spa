@@ -35,6 +35,8 @@ function MoviesFilterFormBar() {
         // Example: genres=action&genres=comedy...
         if (genres.length > 0) {
             genres.forEach(genre => params.append('genres', genre));
+        } else {
+            params.append('genres', null);
         }
 
         if (minDate) {
