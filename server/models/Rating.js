@@ -2,7 +2,22 @@ import db from '../config/database/db.js';
 
 class Rating {
     static async getAll() {
-        const sql = 'SELECT * FROM ratings';
+        const sql = `
+            SELECT
+                r.id,
+                r.user_id,
+                r.movie_id,
+                r.score,
+                r.comment,
+                r.created_at,
+                r.edited,
+                u.nickname,
+                m.title
+            FROM ratings r
+                     JOIN users u ON r.user_id = u.id
+                     JOIN movies m ON r.movie_id = m.id
+            ORDER BY r.created_at DESC
+        `;
 
         return await db.all(sql);
     }
@@ -87,7 +102,6 @@ class Rating {
 
         return await db.all(sql, params);
     }
-
     static async getByUserIdWithMovieInfo(userId) {
         const sql = `
             SELECT 

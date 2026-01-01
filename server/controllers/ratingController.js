@@ -1,14 +1,11 @@
 import Rating from '../models/Rating.js';
-import {calculateAverageScore, roundScore} from "../../utils/utils.js";
+import {roundScore} from "../../utils/utils.js";
 
 const getAllRatings = async (req, res) => {
     try {
         const ratings = await Rating.getAll();
         res.status(200).json(ratings);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error while fetching ratings' });
-    }
+    } catch (error) {}
 }
 
 const getRatingById = async (req, res) => {
