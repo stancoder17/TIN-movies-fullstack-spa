@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import './MovieDetails.css';
+import styles from './MovieDetails.module.css';
+import ratingStyles from '../RatingUpdate.module.css'
 import RatingsList from "../common/RatingsList.jsx";
 import RatingListItem from "../common/RatingListItem.jsx";
 import ratingConstraints from '../../../../utils/constraints/ratingConstraints.js';
@@ -117,8 +118,9 @@ function MovieDetails() {
     };
 
     return (
-        <div className="main-content">
-            {movie && (
+        <div className={styles.movieDetailsPageWrapper}>
+            <div className={`main-content ${styles.mainContent || ''}`.trim()}>
+                {movie && (
                 <>
                     <div className="details-header">
                         <div className="title-and-details">
@@ -130,18 +132,18 @@ function MovieDetails() {
                         </div>
 
                         <div className="actions-and-media-rating">
-                            <div className="action-buttons">
+                            <div className={`action-buttons ${styles.actionButtons || ''}`.trim()}>
                                 <Link to={`/movies/${id}/edit`}>
                                     <button className="btn-blue" type="button">Edit</button>
                                 </Link>
                                 <button className="btn-red" type="button" onClick={handleMovieDelete}>Delete</button>
                             </div>
                             {averageScore && (
-                                <div className="media-rating">
+                                <div className={`media-rating ${styles.mediaRating || ''}`.trim()}>
                                     <h1>
-                                        <span className="rating-stars">★</span>
-                                        <span className="rating-score">{averageScore}</span>
-                                        <span className="rating-scale">/{ratingConstraints.score.max}</span>
+                                        <span className={`rating-stars ${styles.ratingStars || ''}`.trim()}>★</span>
+                                        <span className={`rating-score ${styles.ratingScore || ''}`.trim()}>{averageScore}</span>
+                                        <span className={`rating-scale ${styles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
                                     </h1>
                                     <h2 className="text-main">{ratings.length} rating(s)</h2>
                                 </div>
@@ -167,15 +169,16 @@ function MovieDetails() {
 
                     <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} ItemComponent={RatingListItem} />
 
-                    <div className="form-container">
-                        <form onSubmit={handleRatingSubmit}>
+                    <div className={`form-container ${styles.formContainer || ''}`.trim()}>
+                        <form className={`${styles.movieDetailsForm} ${ratingStyles.movieDetailsForm}`} onSubmit={handleRatingSubmit}>
                             <textarea id="comment" name="comment" placeholder="Write a comment..."></textarea>
-                            <div className="media-rating">
+                            <h2 className='text-main'>Rate:</h2>
+                            <div className={`media-rating ${styles.mediaRating || ''}`.trim()}>
                                 <h1>
-                                    <span className="rating-stars">★</span>
+                                    <span className={`rating-stars ${styles.ratingStars || ''}`.trim()}>★</span>
                                     <label htmlFor="rating-score"></label>
                                     <input type="number" id="rating-score" name="rating-score" min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
-                                    <span className="rating-scale">/{ratingConstraints.score.max}</span>
+                                    <span className={`rating-scale ${styles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
                                 </h1>
                             </div>
                             <button type="submit">Post</button>
@@ -183,6 +186,7 @@ function MovieDetails() {
                     </div>
                 </>
             )}
+        </div>
         </div>
     )
 }

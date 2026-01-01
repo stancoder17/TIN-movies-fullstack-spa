@@ -3,6 +3,8 @@ import {useParams, useNavigate} from "react-router-dom";
 import RatingsList from "../common/RatingsList.jsx";
 import RatingListItem from "../common/RatingListItem.jsx";
 import {formatDate} from "../../utils/formatUtils.js";
+import styles from './UserDetails.module.css';
+import editStyles from './UserEdit.module.css';
 
 function UserDetails({ beingEdited }) {
     const navigate = useNavigate();
@@ -106,145 +108,151 @@ function UserDetails({ beingEdited }) {
     };
 
     return (
-        <div className="main-content">
-            {user && (
-                <>
-                    {beingEdited && fields ? (
-                        <form className="user-profile-header" onSubmit={handleSubmit}>
-                            <div className="user-avatar-edit">
-                                <img className="user-avatar user-avatar-big"
-                                     src={user.profile_picture_url}
-                                     alt="user-profile-img"/>
-                                <label className="text-main-dark" htmlFor={fields.profile_picture_url.name}>Profile picture URL:</label>
-                                <input
-                                    type={fields.profile_picture_url.type}
-                                    name={fields.profile_picture_url.name}
-                                    id={fields.profile_picture_url.name}
-                                    required={fields.profile_picture_url.required}
-                                    min={fields.profile_picture_url.minLength}
-                                    max={fields.profile_picture_url.maxLength}
-                                    pattern={fields.profile_picture_url.pattern}
-                                    defaultValue={user.profile_picture_url}
-                                />
-                            </div>
-                            <div className="user-profile-details">
-                                <h1>
+        <div className={styles.userDetailsWrapper}>
+            <div className={`main-content ${styles.mainContent || ''}`.trim()}>
+                {user && (
+                    <>
+                        {beingEdited && fields ? (
+                            <form className={`user-profile-header ${editStyles.userEditForm}`} onSubmit={handleSubmit}>
+                                <div className="user-avatar-edit">
+                                    <img className={`user-avatar user-avatar-big ${styles.userAvatarBig || ''}`.trim()}
+                                         src={user.profile_picture_url}
+                                         alt="user-profile-img"/>
                                     <input
-                                        type={fields.nickname.type}
-                                        name={fields.nickname.name}
-                                        id={fields.nickname.name}
-                                        required={fields.nickname.required}
-                                        minLength={fields.nickname.minLength}
-                                        maxLength={fields.nickname.maxLength}
-                                        defaultValue={user.nickname}
+                                        className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                        type={fields.profile_picture_url.type}
+                                        name={fields.profile_picture_url.name}
+                                        id={fields.profile_picture_url.name}
+                                        required={fields.profile_picture_url.required}
+                                        min={fields.profile_picture_url.minLength}
+                                        max={fields.profile_picture_url.maxLength}
+                                        pattern={fields.profile_picture_url.pattern}
+                                        defaultValue={user.profile_picture_url}
                                     />
-                                </h1>
-                                <textarea
-                                    name={fields.bio.name}
-                                    id={fields.bio.name}
-                                    placeholder={fields.bio.placeholder}
-                                    required={fields.bio.required}
-                                    minLength={fields.bio.minLength}
-                                    maxLength={fields.bio.maxLength}
-                                    defaultValue={user.bio}
-                                />
-                                <div className="user-labels-and-values">
-                                    <div className="user-details-labels">
-                                        <h3>
-                                            <label className="text-main-dark" htmlFor={fields.email.name}>Email:</label>
-                                        </h3>
-                                        <h3>
-                                            <label className="text-main-dark" htmlFor={fields.password.name}>Password:</label>
-                                        </h3>
-                                        <h3>
-                                            <label className="text-main-dark" htmlFor={fields.date_of_birth.name}>Date of birth:</label>
-                                        </h3>
-                                    </div>
-                                    <div className="user-details-values">
-                                        <h3>
-                                            <input
-                                                type={fields.email.type}
-                                                name={fields.email.name}
-                                                id={fields.email.name}
-                                                required={fields.email.required}
-                                                minLength={fields.email.minLength}
-                                                maxLength={fields.email.maxLength}
-                                                pattern={fields.email.pattern}
-                                                defaultValue={user.email}
-                                            />
-                                        </h3>
-                                        <h3>
-                                            <input
-                                                autoComplete="new-password"
-                                                type={fields.password.type}
-                                                name={fields.password.name}
-                                                id={fields.password.name}
-                                                placeholder={fields.password.placeholder}
-                                                required={fields.password.required}
-                                                minLength={fields.password.minLength}
-                                                maxLength={fields.password.maxLength}
-                                            />
-                                        </h3>
-                                        <h3>
-                                            <input
-                                                type={fields.date_of_birth.type}
-                                                name={fields.date_of_birth.name}
-                                                id={fields.date_of_birth.name}
-                                                defaultValue={user.date_of_birth}
-                                            />
-                                        </h3>
-                                    </div>
                                 </div>
-
-                                <div className="user-profile-buttons">
-                                    <button className="btn-blue" type="submit">Save</button>
-                                    <button className="btn-red" type="button" onClick={handleCancel}>Cancel</button>
-                                </div>
-                            </div>
-                        </form>
-                    ) : (
-                        <>
-                            <div className="user-profile-header">
-                                <img className="user-avatar user-avatar-big" src={user.profile_picture_url}
-                                     alt="user-profile-img"/>
                                 <div className="user-profile-details">
-                                    <h1 className="text-main">{user.nickname}</h1>
-                                    {user.bio ?
-                                        <p className="text-accent">"{user.bio}"</p>
-                                        :
-                                        <p className="text-accent">*No bio description*</p>
-                                    }
+                                    <h1>
+                                        <input
+                                            className={`${editStyles.userDetailsInput} ${editStyles.largeInput}`.trim()}
+                                            type={fields.nickname.type}
+                                            name={fields.nickname.name}
+                                            id={fields.nickname.name}
+                                            required={fields.nickname.required}
+                                            minLength={fields.nickname.minLength}
+                                            maxLength={fields.nickname.maxLength}
+                                            defaultValue={user.nickname}
+                                        />
+                                    </h1>
+                                    <textarea
+                                        name={fields.bio.name}
+                                        id={fields.bio.name}
+                                        placeholder={fields.bio.placeholder}
+                                        required={fields.bio.required}
+                                        minLength={fields.bio.minLength}
+                                        maxLength={fields.bio.maxLength}
+                                        defaultValue={user.bio}
+                                    />
                                     <div className="user-labels-and-values">
                                         <div className="user-details-labels">
-                                            <h3 className="text-main-dark">Email: </h3>
-                                            <h3 className="text-main-dark">Date of birth: </h3>
-                                            <h3 className="text-main-dark">Joined: </h3>
+                                            <h3>
+                                                <label className="text-main-dark" htmlFor={fields.email.name}>Email:</label>
+                                            </h3>
+                                            <h3>
+                                                <label className="text-main-dark" htmlFor={fields.password.name}>Password:</label>
+                                            </h3>
+                                            <h3>
+                                                <label className="text-main-dark" htmlFor={fields.date_of_birth.name}>Date of birth:</label>
+                                            </h3>
                                         </div>
                                         <div className="user-details-values">
-                                            <h3 className="text-main">{user.email}</h3>
-                                            <h3 className="text-main">{formatDate(user.date_of_birth)}</h3>
-                                            <h3 className="text-main">{formatDate(user.date_of_joining)}</h3>
+                                            <h3>
+                                                <input
+                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                    type={fields.email.type}
+                                                    name={fields.email.name}
+                                                    id={fields.email.name}
+                                                    required={fields.email.required}
+                                                    minLength={fields.email.minLength}
+                                                    maxLength={fields.email.maxLength}
+                                                    pattern={fields.email.pattern}
+                                                    defaultValue={user.email}
+                                                />
+                                            </h3>
+                                            <h3>
+                                                <input
+                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                    autoComplete="new-password"
+                                                    type={fields.password.type}
+                                                    name={fields.password.name}
+                                                    id={fields.password.name}
+                                                    placeholder={fields.password.placeholder}
+                                                    required={fields.password.required}
+                                                    minLength={fields.password.minLength}
+                                                    maxLength={fields.password.maxLength}
+                                                />
+                                            </h3>
+                                            <h3>
+                                                <input
+                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                    type={fields.date_of_birth.type}
+                                                    name={fields.date_of_birth.name}
+                                                    id={fields.date_of_birth.name}
+                                                    defaultValue={user.date_of_birth}
+                                                />
+                                            </h3>
                                         </div>
                                     </div>
 
                                     <div className="user-profile-buttons">
-                                        <button className="btn-blue" type="button" onClick={() => navigate(`/users/${id}/edit`)}>Edit profile
-                                        </button>
-                                        <button className="btn-red" type="button" onClick={handleUserDelete}>Delete account
-                                        </button>
+                                        <button className="btn-blue" type="submit">Save</button>
+                                        <button className="btn-red" type="button" onClick={handleCancel}>Cancel</button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
+                        ) : (
+                            <>
+                                <div className="user-profile-header">
+                                    <img className={`user-avatar user-avatar-big ${styles.userAvatarBig || ''}`.trim()} src={user.profile_picture_url}
+                                         alt="user-profile-img"/>
+                                    <div className="user-profile-details">
+                                        <h1 className="text-main">{user.nickname}</h1>
+                                        {user.bio ?
+                                            <p className="text-accent">"{user.bio}"</p>
+                                            :
+                                            <p className="text-accent">*No bio description*</p>
+                                        }
+                                        <div className="user-labels-and-values">
+                                            <div className="user-details-labels">
+                                                <h3 className="text-main-dark">Email: </h3>
+                                                <h3 className="text-main-dark">Date of birth: </h3>
+                                                <h3 className="text-main-dark">Joined: </h3>
+                                            </div>
+                                            <div className="user-details-values">
+                                                <h3 className="text-main">{user.email}</h3>
+                                                <h3 className="text-main">{formatDate(user.date_of_birth)}</h3>
+                                                <h3 className="text-main">{formatDate(user.date_of_joining)}</h3>
+                                            </div>
+                                        </div>
 
-                            <div>
-                                <h1 className="text-main">Ratings</h1>
-                                <hr className="separator separator-bright"/>
-                                <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} ItemComponent={RatingListItem} />
-                            </div>
-                        </>
-                    )}
-                </>
-            )}
+                                        <div className="user-profile-buttons">
+                                            <button className="btn-blue" type="button" onClick={() => navigate(`/users/${id}/edit`)}>Edit profile
+                                            </button>
+                                            <button className="btn-red" type="button" onClick={handleUserDelete}>Delete account
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="comments-section">
+                                    <h1 className="text-main">Ratings</h1>
+                                    <hr className="separator separator-bright"/>
+                                    <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} ItemComponent={RatingListItem} />
+                                </div>
+                            </>
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     )
 }

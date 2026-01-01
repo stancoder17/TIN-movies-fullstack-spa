@@ -1,10 +1,10 @@
 import MovieList from "./MovieList.jsx";
 import MoviesFilterFormBar from "./MoviesFilterFormBar.jsx";
-import './MoviesPage.css';
+import styles from './MoviesPage.module.css';
 
 function MoviesPage() {
     return (
-        <>
+        <div className={styles.moviesPageWrapper}>
             <div className="sidebar sidebar-left">
                 <h2 className="text-main">Filters</h2>
                 <hr className="separator"/>
@@ -12,10 +12,10 @@ function MoviesPage() {
                 <MoviesFilterFormBar />
             </div>
 
-            <div className="main-content">
+            <div className={`main-content ${styles.mainContent || ''}`.trim()}>
                 <MovieList />
             </div>
-        </>
+        </div>
     );
 }
 

@@ -1,7 +1,9 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import '../movie-details/Movie_RatingUpdate.css';
-import '../RatingUpdate.css';
+import movieRatingStyles from '../movie-details/Movie_RatingUpdate.module.css';
+import ratingStyles from '../RatingUpdate.module.css';
+import movieDetailsStyles from '../movie-details/MovieDetails.module.css';
+import userDetailsStyles from '../user-details/UserDetails.module.css';
 import ratingConstraints from "../../../../utils/constraints/ratingConstraints.js";
 import {formatDate} from "../../utils/formatUtils.js";
 
@@ -43,7 +45,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
 
     return (
         <div>
-            <FormOrDiv className="comment" onSubmit={beingEdited ? onSubmit : undefined}>
+            <FormOrDiv className={`comment ${ratingStyles.comment} ${movieRatingStyles.comment} ${beingEdited ? ratingStyles.ratingUpdateForm : ''}`.trim()} onSubmit={beingEdited ? onSubmit : undefined}>
                 <div className="comment-header">
                     <div className="production-info">
                         {isMovieRating && (
@@ -59,7 +61,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                         {isUserRating && (
                             <>
                                 <Link to={`/movies/${rating.movie_id}`}>
-                                    <img className="media-poster" src={rating.poster_url} alt={`${rating.title} poster`}/>
+                                    <img className={`media-poster ${userDetailsStyles.mediaPoster || ''}`.trim()} src={rating.poster_url} alt={`${rating.title} poster`}/>
                                 </Link>
                                 <Link to={`/movies/${rating.movie_id}`}>
                                     <h3 className="text-main">{rating.title}</h3>
@@ -68,18 +70,18 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                         )}
                     </div>
 
-                    <div className="media-rating">
+                    <div className={`media-rating ${movieDetailsStyles.mediaRating || ''} ${ratingStyles.mediaRating}`.trim()}>
                         <h1>
-                            <span className="rating-stars">★</span>
+                            <span className={`rating-stars ${movieDetailsStyles.ratingStars || ''}`.trim()}>★</span>
                             {beingEdited ? (
                                 <>
                                     <label htmlFor="rating-score"></label>
                                     <input type="number" id="rating-score" name="rating-score" defaultValue={rating.score} min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
                                 </>
                             ) : (
-                                <span className="rating-score">{rating.score}</span>
+                                <span className={`rating-score ${movieDetailsStyles.ratingScore || ''}`.trim()}>{rating.score}</span>
                             )}
-                            <span className="rating-scale">/{ratingConstraints.score.max}</span>
+                            <span className={`rating-scale ${movieDetailsStyles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
                         </h1>
                     </div>
 
@@ -91,7 +93,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
 
                 {beingEdited ? (
                     <>
-                        <div className="comment-body">
+                        <div className={`comment-body ${ratingStyles.commentBody || ''}`.trim()}>
                             <label htmlFor="comment"></label>
                             <textarea id="comment" name="comment" placeholder="Comment" defaultValue={rating.comment}></textarea>
                         </div>
@@ -106,12 +108,12 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                 ) : (
                     <>
                         {rating.comment ? (
-                            <div className="comment-body">
+                            <div className={`comment-body ${ratingStyles.commentBody || ''}`.trim()}>
                                 <p className="text-accent">{rating.comment}</p>
                             </div>
                         ) : (<p className="text-accent"><em>*no comment provided*</em></p>)}
 
-                        <div className="action-buttons">
+                        <div className={`action-buttons ${movieDetailsStyles.commentActionButtons || ''}`.trim()}>
                             <button className="btn-blue" type="button" onClick={onEditClick}>Edit</button>
                             <button className="btn-red" type="button" onClick={onDeleteClick}>Delete</button>
                         </div>

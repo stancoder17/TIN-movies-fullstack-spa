@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import UserListItem from "./UserListItem.jsx";
+import styles from './Users.module.css';
 
 function UserList() {
     const [users, setUsers] = useState([]);
@@ -26,11 +27,12 @@ function UserList() {
     };
 
     return (
-        <div className="main-content">
-            <h1 className="text-main">Community Users</h1>
-            <hr className="separator"/>
+        <div className={styles.userListPageWrapper}>
+            <div className={`main-content ${styles.mainContent || ''}`.trim()}>
+                <h1 className="text-main">Community Users</h1>
+                <hr className="separator"/>
 
-            {users.length > 0 ? (
+                {users.length > 0 ? (
             <table className="users-table">
                 <thead>
                 <tr>
@@ -53,6 +55,7 @@ function UserList() {
             ) : (
                 <p className="text-main">No users found.</p>
             )}
+        </div>
         </div>
     );
 }

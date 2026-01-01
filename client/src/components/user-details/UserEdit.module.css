@@ -1,0 +1,43 @@
+.largeInput {
+    font-size: 32px;
+    padding: 5px;
+}
+
+.smallInput {
+    font-size: 19px;
+}
+
+textarea {
+    font-size: 18px;
+    min-width: 90%;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.userEditForm {
+    align-items: flex-start;
+}
+
+.user-avatar-big {
+    margin-right: 0;
+}
+
+.user-avatar-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-m);
+}
+
+.userDetailsInput {
+    background: var(--color-main-navy);
+    color: var(--color-text);
+    padding: var(--space-s);
+    border-radius: var(--border-radius-s);
+    margin-bottom: var(--space-s);
+}
+
+.user-details-values h3 {
+    margin-bottom: var(--space-xs);
+    margin-top: var(--space-xs);
+}

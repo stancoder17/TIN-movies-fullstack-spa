@@ -1,8 +1,8 @@
-.media-poster:hover {
+.mediaPoster:hover {
     scale: 1;
 }
 
-.media-rating input {
+.mediaRating input {
     background-color: var(--color-main-navy);
     color: var(--color-text-light);
     text-align: center;
@@ -14,12 +14,12 @@ form.comment {
     align-items: stretch;
 }
 
-.comment-body {
-    flex: 1 1 auto;
+.commentBody {
     display: flex;
+    flex: 1 1 auto;
 }
 
-.comment-body textarea {
+.commentBody textarea {
     flex: 1 1 auto;
     height: 100%;
     width: 100%;
@@ -27,6 +27,6 @@ form.comment {
     resize: none;
 }
 
-form {
+.movieDetailsForm {
     width: auto;
 }

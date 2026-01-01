@@ -1,12 +1,15 @@
-main {
+.userListPageWrapper {
     background-color: var(--color-main-navy);
 
+    display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+
+    flex: 1 1 auto;
 }
 
-.main-content {
+.mainContent {
     flex-direction: column;
     align-items: flex-start;
     width: 80%;

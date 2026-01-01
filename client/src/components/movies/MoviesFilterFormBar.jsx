@@ -2,6 +2,7 @@ import {useState} from "react";
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import DateRangeSliderInput from "./DateRangeSliderInput.jsx";
+import styles from './MoviesPage.module.css';
 
 function MoviesFilterFormBar() {
     const navigate = useNavigate();
@@ -52,10 +53,10 @@ function MoviesFilterFormBar() {
     }
 
     return (
-        <div className="form-container-unstyled">
-            <form onSubmit={handleSubmit}>
-                <div className="form-inputs-container">
-                    <div className="form-input-group">
+        <div className={`form-container-unstyled ${styles.formContainerUnstyled || ''}`.trim()}>
+            <form className={styles.filtersForm} onSubmit={handleSubmit}>
+                <div className={`form-inputs-container ${styles.formInputsContainer || ''}`.trim()}>
+                    <div className={`form-input-group ${styles.formInputGroup || ''}`.trim()}>
                         <h3 className="text-main">Genre:</h3>
                         {
                             fields.genres.map(genre => (
@@ -68,7 +69,7 @@ function MoviesFilterFormBar() {
                         }
                     </div>
 
-                    <div className="form-input-group">
+                    <div className={`form-input-group ${styles.formInputGroup || ''}`.trim()}>
                         <h3 className="text-main">Year:</h3>
                         {fields.minDate !== null && fields.maxDate !== null && ( // only render if dates are loaded, component is rendered before data fetch (which is asynchronous) is finished.
                             <DateRangeSliderInput minDate={fields.minDate} maxDate={fields.maxDate} />
@@ -77,8 +78,8 @@ function MoviesFilterFormBar() {
 
                 </div>
 
-                <div className="form-buttons-etc">
-                    <button type="submit" className="wide">Filter</button>
+                <div className={`form-buttons-etc ${styles.formButtonsEtc || ''}`.trim()}>
+                    <button type="submit" className={`wide ${styles.wide || ''}`.trim()}>Filter</button>
                 </div>
             </form>
         </div>

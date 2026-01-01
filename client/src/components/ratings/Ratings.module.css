@@ -1,12 +1,13 @@
-main {
+.ratingsPageWrapper {
     background-color: var(--color-main-navy);
 
+    display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
 }
 
-.main-content {
+.mainContent {
     flex-direction: column;
     align-items: flex-start;
     width: 80%;

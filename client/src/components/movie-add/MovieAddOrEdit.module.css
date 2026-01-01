@@ -1,14 +1,16 @@
-
-main {
+.movieAddOrEditPageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: var(--color-main-navy);
     padding: 50px 50px 100px;
 }
 
-button.wide {
+.movieAddOrEditPageWrapper button.wide {
     width: 60%;
 }
 
-.main-content {
+.mainContent {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -16,7 +18,7 @@ button.wide {
     width: auto;
 }
 
-.form-container {
+.formContainer {
     display: flex;
     flex-direction: column;
 
@@ -25,28 +27,34 @@ button.wide {
     box-shadow: none;
 }
 
-.form-input {
+.formInput {
     background: var(--color-main-navy);
-    width: auto;
+    width: 700px;
 }
 
-.form-input-description {
+.formInputDescription {
     width: 700px;
     height: 150px;
 }
 
-.form-buttons-etc {
+.formInputGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.formButtonsEtc {
     margin-top: var(--space-m);
 }
 
-input {
+.movieAddOrEditPageWrapper input {
     color: var(--color-text);
 }
 
-input[type="file"] {
+.movieAddOrEditPageWrapper input[type="file"] {
     width: 275px;
 }
 
-input[type=date]{
+.movieAddOrEditPageWrapper input[type=date] {
     width: 150px;
 }

@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import { formatRatingScore } from '../../utils/formatUtils.js';
 import ratingConstraints from '../../../../utils/constraints/ratingConstraints.js';
+import styles from './MoviesPage.module.css'
 
 function MovieListItem({ movie }) {
     const releaseYear = new Date(movie.release_date).getFullYear();
@@ -17,7 +18,7 @@ function MovieListItem({ movie }) {
                 <p className="text-accent">{movie.description}</p>
             </div>
 
-            <div className="media-rating">
+            <div className={`media-rating ${styles.mediaRating || ''}`.trim()}>
                 <h1>
                     <span className="rating-stars">★</span>
                     <span className="rating-score">{averageScore}</span>

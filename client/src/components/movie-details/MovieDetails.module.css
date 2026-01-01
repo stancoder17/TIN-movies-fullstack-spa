@@ -1,0 +1,111 @@
+.movieDetailsPageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-main-navy);
+    padding: 50px 50px 100px;
+}
+
+.commentActionButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: var(--space-m);
+    padding-left: var(--space-m);
+    border-left: 1px solid var(--color-main-navy);
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 1000px;
+
+    padding: var(--space-m);
+}
+
+.mediaRating {
+    justify-content: flex-start;
+    width: auto;
+    margin-bottom: var(--space-m);
+}
+
+.mediaRating h1 {
+    margin: 0;
+}
+
+.mediaRating h2 {
+    font-size: 100%;
+    margin: 0;
+}
+
+.ratingScore {
+    font-size: 75%;
+}
+
+.ratingScale {
+    font-size: 50%;
+}
+
+.ratingStars {
+    font-size: 75%;
+}
+
+.formContainer {
+    background-color: var(--color-main-navy-dark);
+    box-shadow: none;
+
+    margin: 0;
+    width: 95%;
+}
+
+.movieDetailsForm input {
+    width: auto;
+    height: auto;
+
+    background-color: var(--color-main-navy);
+    color: var(--color-text-light);
+    text-align: center;
+    width: 50px;
+    height: 35px;
+}
+
+.movieDetailsForm {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.movieDetailsForm button {
+    margin: var(--space-s) 0;
+}
+
+.movieDetailsForm textarea {
+    background: var(--color-main-navy);
+    color: var(--color-text);
+    resize: none;
+    width: 95%;
+    height: 200px;
+    font-size: 18px;
+    padding: var(--space-s);
+    border-radius: var(--border-radius-s);
+    margin-bottom: var(--space-s);
+}
+
+.ratingScaleContainer {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-s);
+}
+
+.radioItemVertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ratingRadioGroup h3 {
+    margin-bottom: var(--space-xs);
+}

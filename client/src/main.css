@@ -60,9 +60,13 @@
     }
 
     body {
-        margin: 0; /* remove default margin */
+        margin: 0;                 /* remove default margin */
     }
+
     #root {
+        background-image: none;
+        background-color: var(--color-main-navy);
+
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -134,7 +138,6 @@
     .comments-section {
         border-radius: var(--border-radius-m);
         width: 100%;
-        margin-top: var(--space-m);
     }
 
     .details-header {
@@ -275,10 +278,8 @@
     }
 
     main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1 1 auto; /* cover all remaining space between header and footer */
+        background: var(--color-main-navy);
+        flex: 1 1 auto;            /* cover all remaining space between header and footer */
 
         padding: var(--space-m);
     }
@@ -320,6 +321,11 @@
 
     .media-rating h1 {
         color: var(--color-main-yellow);
+
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: var(--space-s);
     }
 
     .media-rating .rating-stars {
@@ -460,8 +466,8 @@
 
     .slider-labels {
         display: flex;
-        justify-content: space-between;
-        width: 100%;
+
+        gap: var(--space-s);
     }
 
     .text-accent {
@@ -506,6 +512,13 @@
         height: 200px;
     }
 
+    .user-avatar-edit {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-m);
+    }
+
     .production-info {
         display: flex;
         flex-direction: column;
@@ -516,7 +529,7 @@
     .user-details-labels {
         display: flex;
         flex-direction: column;
-
+        justify-content: space-around;
     }
 
     .profile-menu {

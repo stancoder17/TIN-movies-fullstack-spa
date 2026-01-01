@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import './MovieAddOrEdit.css';
+import styles from './MovieAddOrEdit.module.css';
 
 // One component for movie POST and UPDATE, dependent on beingEdited prop
 function MovieAddOrEdit({beingEdited = false}) {
@@ -66,8 +66,9 @@ function MovieAddOrEdit({beingEdited = false}) {
     };
 
     return (
-        <div className="main-content">
-            <div className="form-container">
+        <div className={styles.movieAddOrEditPageWrapper}>
+            <div className={`main-content ${styles.mainContent || ''}`.trim()}>
+                <div className={`form-container ${styles.formContainer || ''}`.trim()}>
                 <h1 className="text-main">{title}</h1>
 
                 <hr className="separator"/>
@@ -75,14 +76,14 @@ function MovieAddOrEdit({beingEdited = false}) {
                 <form className="add-form" onSubmit={handleSubmit}>
                     <div className="form-inputs-container">
                         {fields && fields.map(field => (
-                            <div key={field.name}>
-                                <label htmlFor={field.name} className="text-main">{field.label}</label>
+                            <div key={field.name} className={styles.formInputGroup}>
+                                {beingEdited ? <label htmlFor={field.name} className="text-main">{field.label}</label> : null}
                                 {field.type === 'textarea' ? (
                                     <textarea
                                         id={field.name}
                                         name={field.name}
                                         placeholder={field.label}
-                                        className="form-input form-input-description"
+                                        className={`form-input form-input-description ${styles.formInput || ''} ${styles.formInputDescription || ''}`.trim()}
                                         required={field.required}
                                         minLength={field.minLength}
                                         maxLength={field.maxLength}
@@ -94,7 +95,7 @@ function MovieAddOrEdit({beingEdited = false}) {
                                         id={field.name}
                                         name={field.name}
                                         placeholder={field.label}
-                                        className="form-input"
+                                        className={`form-input ${styles.formInput || ''}`.trim()}
                                         required={field.required}
                                         minLength={field.minLength}
                                         maxLength={field.maxLength}
@@ -108,12 +109,13 @@ function MovieAddOrEdit({beingEdited = false}) {
                         ))}
                     </div>
 
-                    <div className="form-buttons-etc">
-                        <button type="submit" className="btn-blue wide">{submitLabel}</button>
+                    <div className={`form-buttons-etc ${styles.formButtonsEtc || ''}`.trim()}>
+                        <button type="submit" className={`btn-blue wide ${styles.wide || ''}`.trim()}>{submitLabel}</button>
                     </div>
                 </form>
             </div>
 
+        </div>
         </div>
     )
 }

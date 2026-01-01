@@ -1,0 +1,33 @@
+.userDetailsWrapper {
+    background-color: var(--color-main-navy);
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 1000px;
+
+    background-color: var(--color-main-navy-dark);
+    padding: var(--space-m);
+}
+
+.userAvatarBig {
+    margin-right: var(--space-l);
+}
+
+.mediaPoster {
+    width: 125px;
+    height: 200px;
+    margin: 0;
+}
+
+.mediaPoster:hover {
+    transition: 0.2s;
+    transition-delay: 0.05s;
+    scale: 1.05;
+}
