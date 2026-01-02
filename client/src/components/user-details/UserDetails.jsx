@@ -5,18 +5,47 @@ import RatingListItem from "../common/RatingListItem.jsx";
 import {formatDate} from "../../utils/formatUtils.js";
 import styles from './UserDetails.module.css';
 import editStyles from './UserEdit.module.css';
+import {
+    validateNickname,
+    validateEmail,
+    validatePasswordUpdate,
+    validateProfilePictureUrl,
+    validateDateOfBirth,
+    validateBio
+} from '../../utils/UserValidation.js';
 
 function UserDetails({ beingEdited }) {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [ratings, setRatings] = useState([]);
     const [fields, setFields] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState({
+        nickname: '',
+        email: '',
+        password: '',
+        profile_picture_url: '',
+        date_of_birth: '',
+        bio: ''
+    });
     const { id } = useParams();
 
     useEffect(() => {
         fetch(`http://localhost:5000/api/users/${id}`)
             .then(response => response.json())
-            .then(data => setUser(data))
+            .then(data => {
+                setUser(data);
+                if (beingEdited) {
+                    setFormData({
+                        nickname: data.nickname || '',
+                        email: data.email || '',
+                        password: '',
+                        profile_picture_url: data.profile_picture_url || '',
+                        date_of_birth: data.date_of_birth || '',
+                        bio: data.bio || ''
+                    });
+                }
+            })
             .catch(error => console.error(`Error fetching user details for ID ${id}:`, error));
 
         if (!beingEdited) {
@@ -46,11 +75,46 @@ function UserDetails({ beingEdited }) {
         }
     }
 
+    const onChange = (e) => {
+        const {name, value} = e.target;
+        setFormData({...formData, [name]: value});
+        setErrors({...errors, [name]: validateField(name, value)});
+    };
+
+    const validateField = (fieldName, fieldValue) => {
+        switch (fieldName) {
+            case 'nickname':
+                return validateNickname(fieldValue);
+            case 'email':
+                return validateEmail(fieldValue);
+            case 'password':
+                return validatePasswordUpdate(fieldValue);
+            case 'profile_picture_url':
+                return validateProfilePictureUrl(fieldValue);
+            case 'date_of_birth':
+                return validateDateOfBirth(fieldValue);
+            case 'bio':
+                return validateBio(fieldValue);
+            default:
+                return null;
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
-        const userData = Object.fromEntries(formData.entries());
+        const allErrors = {};
+        Object.keys(formData).forEach(key => {
+            const error = validateField(key, formData[key]);
+            if (error) {
+                allErrors[key] = error;
+            }
+        });
+
+        if (Object.keys(allErrors).length > 0) {
+            setErrors(allErrors);
+            return;
+        }
 
         try {
             const response = await fetch(`http://localhost:5000/api/users/${id}`, {
@@ -58,7 +122,7 @@ function UserDetails({ beingEdited }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userData)
+                body: JSON.stringify(formData)
             });
 
             if (response.ok) {
@@ -69,8 +133,18 @@ function UserDetails({ beingEdited }) {
         }
     };
 
-    const handleCancel = () => {
-        navigate(`/users/${id}`);
+    const handleCancel = (e) => {
+        e.preventDefault();
+        setFormData({
+            nickname: '',
+            email: '',
+            password: '',
+            profile_picture_url: '',
+            date_of_birth: '',
+            bio: ''
+        });
+        setErrors({});
+        navigate(`/users/${id}`, { replace: true });
     };
 
     const handleRatingUpdate = async (ratingId, updatedRatingData) => {
@@ -113,44 +187,38 @@ function UserDetails({ beingEdited }) {
                 {user && (
                     <>
                         {beingEdited && fields ? (
-                            <form className={`user-profile-header ${editStyles.userEditForm}`} onSubmit={handleSubmit}>
+                            <form className={`user-profile-header ${editStyles.userEditForm}`} noValidate onSubmit={handleSubmit}>
                                 <div className="user-avatar-edit">
                                     <img className={`user-avatar user-avatar-big ${styles.userAvatarBig || ''}`.trim()}
                                          src={user.profile_picture_url}
                                          alt="user-profile-img"/>
+                                    {errors.profile_picture_url && <span className="form-error-brighter">{errors.profile_picture_url}</span>}
                                     <input
-                                        className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                        className={`${editStyles.userDetailsInput} ${editStyles.smallInput} ${editStyles.profileUrlInput}`.trim()}
                                         type={fields.profile_picture_url.type}
                                         name={fields.profile_picture_url.name}
-                                        id={fields.profile_picture_url.name}
-                                        required={fields.profile_picture_url.required}
-                                        min={fields.profile_picture_url.minLength}
-                                        max={fields.profile_picture_url.maxLength}
-                                        pattern={fields.profile_picture_url.pattern}
-                                        defaultValue={user.profile_picture_url}
+                                        placeholder={fields.profile_picture_url.label}
+                                        value={formData.profile_picture_url}
+                                        onChange={onChange}
                                     />
                                 </div>
                                 <div className="user-profile-details">
-                                    <h1>
-                                        <input
-                                            className={`${editStyles.userDetailsInput} ${editStyles.largeInput}`.trim()}
-                                            type={fields.nickname.type}
-                                            name={fields.nickname.name}
-                                            id={fields.nickname.name}
-                                            required={fields.nickname.required}
-                                            minLength={fields.nickname.minLength}
-                                            maxLength={fields.nickname.maxLength}
-                                            defaultValue={user.nickname}
-                                        />
-                                    </h1>
+                                    {errors.nickname && <span className="form-error-brighter">{errors.nickname}</span>}
+                                    <input
+                                        className={`${editStyles.userDetailsInput} ${editStyles.largeInput}`.trim()}
+                                        type={fields.nickname.type}
+                                        name={fields.nickname.name}
+                                        placeholder={fields.nickname.label}
+                                        value={formData.nickname}
+                                        onChange={onChange}
+                                    />
+                                    {errors.bio && <span className="form-error-brighter">{errors.bio}</span>}
                                     <textarea
                                         name={fields.bio.name}
                                         id={fields.bio.name}
-                                        placeholder={fields.bio.placeholder}
-                                        required={fields.bio.required}
-                                        minLength={fields.bio.minLength}
-                                        maxLength={fields.bio.maxLength}
-                                        defaultValue={user.bio}
+                                        placeholder={fields.bio.label}
+                                        value={formData.bio}
+                                        onChange={onChange}
                                     />
                                     <div className="user-labels-and-values">
                                         <div className="user-details-labels">
@@ -165,41 +233,42 @@ function UserDetails({ beingEdited }) {
                                             </h3>
                                         </div>
                                         <div className="user-details-values">
-                                            <h3>
-                                                <input
-                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
-                                                    type={fields.email.type}
-                                                    name={fields.email.name}
-                                                    id={fields.email.name}
-                                                    required={fields.email.required}
-                                                    minLength={fields.email.minLength}
-                                                    maxLength={fields.email.maxLength}
-                                                    pattern={fields.email.pattern}
-                                                    defaultValue={user.email}
-                                                />
-                                            </h3>
-                                            <h3>
-                                                <input
-                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
-                                                    autoComplete="new-password"
-                                                    type={fields.password.type}
-                                                    name={fields.password.name}
-                                                    id={fields.password.name}
-                                                    placeholder={fields.password.placeholder}
-                                                    required={fields.password.required}
-                                                    minLength={fields.password.minLength}
-                                                    maxLength={fields.password.maxLength}
-                                                />
-                                            </h3>
-                                            <h3>
-                                                <input
-                                                    className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
-                                                    type={fields.date_of_birth.type}
-                                                    name={fields.date_of_birth.name}
-                                                    id={fields.date_of_birth.name}
-                                                    defaultValue={user.date_of_birth}
-                                                />
-                                            </h3>
+                                            {errors.email && <span className="form-error-brighter">{errors.email}</span>}
+                                            <input
+                                                className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                type={fields.email.type}
+                                                name={fields.email.name}
+                                                id={fields.email.name}
+                                                required={fields.email.required}
+                                                minLength={fields.email.minLength}
+                                                maxLength={fields.email.maxLength}
+                                                pattern={fields.email.pattern}
+                                                value={formData.email}
+                                                onChange={onChange}
+                                            />
+                                            {errors.password && <span className="form-error-brighter">{errors.password}</span>}
+                                            <input
+                                                className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                autoComplete="new-password"
+                                                type={fields.password.type}
+                                                name={fields.password.name}
+                                                id={fields.password.name}
+                                                placeholder={fields.password.placeholder}
+                                                required={fields.password.required}
+                                                minLength={fields.password.minLength}
+                                                maxLength={fields.password.maxLength}
+                                                value={formData.password}
+                                                onChange={onChange}
+                                            />
+                                            {errors.date_of_birth && <span className="form-error-brighter">{errors.date_of_birth}</span>}
+                                            <input
+                                                className={`${editStyles.userDetailsInput} ${editStyles.smallInput}`.trim()}
+                                                type={fields.date_of_birth.type}
+                                                name={fields.date_of_birth.name}
+                                                id={fields.date_of_birth.name}
+                                                value={formData.date_of_birth}
+                                                onChange={onChange}
+                                            />
                                         </div>
                                     </div>
 

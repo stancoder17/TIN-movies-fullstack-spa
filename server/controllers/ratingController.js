@@ -5,7 +5,10 @@ const getAllRatings = async (req, res) => {
     try {
         const ratings = await Rating.getAll();
         res.status(200).json(ratings);
-    } catch (error) {}
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching ratings' });
+    }
 }
 
 const getRatingById = async (req, res) => {

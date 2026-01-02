@@ -87,7 +87,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
 
                     <div>
                         <h4 className="date">{formatDate(rating.created_at)}</h4>
-                        {rating.edited && <h4 className="text-main">(edited)</h4> }
+                        {rating.edited === true && <h4 className="text-main">(edited)</h4> }
                     </div>
                 </div>
 
@@ -95,7 +95,7 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                     <>
                         <div className={`comment-body ${ratingStyles.commentBody || ''}`.trim()}>
                             <label htmlFor="comment"></label>
-                            <textarea id="comment" name="comment" placeholder="Comment" defaultValue={rating.comment}></textarea>
+                            <textarea id="comment" name="comment" placeholder="Comment" defaultValue={rating.comment} maxLength={ratingConstraints.comment.maxLength}></textarea>
                         </div>
 
                         <div className="comment-actions">
@@ -107,11 +107,13 @@ function RatingListItem({ rating, handleDelete, handleUpdate }) {
                     </>
                 ) : (
                     <>
-                        {rating.comment ? (
-                            <div className={`comment-body ${ratingStyles.commentBody || ''}`.trim()}>
-                                <p className="text-accent">{rating.comment}</p>
-                            </div>
-                        ) : (<p className="text-accent"><em>*no comment provided*</em></p>)}
+                    <div className={`comment-body ${ratingStyles.commentBody || ''}`.trim()}>
+                    {rating.comment ? (
+                            <p className="text-accent">{rating.comment}</p>
+                    ) : (
+                            <p className="text-accent"><em>*no comment provided*</em></p>
+                    )}
+                    </div>
 
                         <div className={`action-buttons ${movieDetailsStyles.commentActionButtons || ''}`.trim()}>
                             <button className="btn-blue" type="button" onClick={onEditClick}>Edit</button>

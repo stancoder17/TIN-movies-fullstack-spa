@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { getAllUsers, getUserById, getUpdateFormFields, createUser, updateUser, deleteUser } from '../controllers/userController.js';
+import { getAllUsers, getUserById, getUpdateFormFields, getRegisterFormFields, createUser, updateUser, deleteUser } from '../controllers/userController.js';
 import { getUserRatingsWithMovieInfo } from '../controllers/ratingController.js';
 import validateUser from '../middleware/userValidation.js';
 import validateId from '../middleware/idValidation.js';
@@ -9,6 +9,7 @@ import User from '../models/User.js';
 
 router.get('/', getAllUsers);
 router.get('/update-form-fields', getUpdateFormFields)
+router.get('/register-form-fields', getRegisterFormFields)
 router.get('/:id', validateId, resourceExists(User), getUserById);
 router.get('/:id/ratings', validateId, resourceExists(User), getUserRatingsWithMovieInfo);
 router.post('/', validateUser, createUser);

@@ -1,0 +1,29 @@
+.registerWrapper {
+    background-image: url("https://i.pinimg.com/originals/19/8b/2f/198b2f01e73b905772279616eccc7c65.jpg");
+    background-color: #cccccc; /* used if the image is unavailable */
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 50px 50px 100px;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+
+    background: var(--color-main-yellow);
+    box-shadow: var(--shadow-main) var(--color-main-yellow-darker);
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.formNickname input {
+    width: 400px;
+}

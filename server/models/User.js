@@ -44,18 +44,26 @@ class User {
         ];
     }
 
+    static async getRegisterFormFields() {
+        return [
+            {type: 'text', label: 'Nickname', name: 'nickname', required: userConstraints.nickname.required, minLength: userConstraints.nickname.minLength, maxLength: userConstraints.nickname.maxLength},
+            {type: 'date', label: 'Date of birth', name: 'date_of_birth', required: userConstraints.dateOfBirth.required, min: userConstraints.dateOfBirth.earliest},
+            {type: 'email', label: 'Email', name: 'email', required: userConstraints.email.required, minLength: userConstraints.email.minLength, maxLength: userConstraints.email.maxLength, pattern: userConstraints.email.pattern.source},
+            {type: 'password', label: 'Password', name: 'password', required: userConstraints.password.required, minLength: userConstraints.password.minLength, maxLength: userConstraints.password.maxLength},
+            {type: 'password', label: 'Confirm password', name: 'confirm_password', required: userConstraints.password.required, minLength: userConstraints.password.minLength, maxLength: userConstraints.password.maxLength}
+        ];
+    }
+
     static async create(userData) {
         const passwordHash = this.hashPassword(userData.password);
         this.validatePasswordHash(passwordHash);
 
-        const sql = 'INSERT INTO users (nickname, email, password_hash, profile_picture_url, date_of_birth, bio) VALUES (?, ?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO users (nickname, email, password_hash, date_of_birth) VALUES (?, ?, ?, ?)';
         const params = [
             userData.nickname,
             userData.email,
             passwordHash,
-            userData.profile_picture_url,
             userData.date_of_birth,
-            userData.bio
         ];
         await db.run(sql, params);
     }

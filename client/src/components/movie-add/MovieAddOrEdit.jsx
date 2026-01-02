@@ -1,13 +1,33 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import styles from './MovieAddOrEdit.module.css';
+import {
+    validateTitle,
+    validateDescription,
+    validateGenre,
+    validateDirector,
+    validateReleaseDate,
+    validateRuntime,
+    validatePosterUrl,
+    validateYoutubeHtmlUrl
+} from '../../utils/MovieValidation.js';
 
 // One component for movie POST and UPDATE, dependent on beingEdited prop
 function MovieAddOrEdit({beingEdited = false}) {
     const navigate = useNavigate();
     const {id} = useParams();
     const [fields, setFields] = useState(null);
-    const [editedMovieData, setEditedMovieData] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        genre: '',
+        director: '',
+        release_date: '',
+        runtime: '',
+        poster_url: '',
+        youtube_html_url: ''
+    });
 
     // Values dependent on component mode (adding vs editing)
     const title = beingEdited ? 'Edit Movie' : 'Add New Movie';
@@ -26,15 +46,66 @@ function MovieAddOrEdit({beingEdited = false}) {
         if (beingEdited && id) {
             fetch(`http://localhost:5000/api/movies/${id}`)
                 .then(response => response.json())
-                .then(data => setEditedMovieData(data))
+                .then(data => {
+                    setFormData({
+                        title: data.title || '',
+                        description: data.description || '',
+                        genre: data.genre || '',
+                        director: data.director || '',
+                        release_date: data.release_date || '',
+                        runtime: data.runtime || '',
+                        poster_url: data.poster_url || '',
+                        youtube_html_url: data.youtube_html_url || ''
+                    });
+                })
                 .catch(error => console.error('Error fetching movie data:', error));
         }
     }, [beingEdited, id]);
 
+    const onChange = (e) => {
+        const {name, value} = e.target;
+        setFormData({...formData, [name]: value});
+        setErrors({...errors, [name]: validateField(name, value)});
+    };
+
+    const validateField = (fieldName, fieldValue) => {
+        switch (fieldName) {
+            case 'title':
+                return validateTitle(fieldValue);
+            case 'description':
+                return validateDescription(fieldValue);
+            case 'genre':
+                return validateGenre(fieldValue);
+            case 'director':
+                return validateDirector(fieldValue);
+            case 'release_date':
+                return validateReleaseDate(fieldValue);
+            case 'runtime':
+                return validateRuntime(fieldValue);
+            case 'poster_url':
+                return validatePosterUrl(fieldValue);
+            case 'youtube_html_url':
+                return validateYoutubeHtmlUrl(fieldValue);
+            default:
+                return null;
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const movieData = Object.fromEntries(formData.entries());
+
+        const allErrors = {};
+        Object.keys(formData).forEach(key => {
+            const error = validateField(key, formData[key]);
+            if (error) {
+                allErrors[key] = error;
+            }
+        });
+
+        if (Object.keys(allErrors).length > 0) {
+            setErrors(allErrors);
+            return;
+        }
 
         try {
             const response = await fetch(url, {
@@ -42,7 +113,7 @@ function MovieAddOrEdit({beingEdited = false}) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(movieData)
+                body: JSON.stringify(formData)
             });
 
             // 'replace' to avoid going back to the form on browser 'back' operation
@@ -54,16 +125,10 @@ function MovieAddOrEdit({beingEdited = false}) {
                     navigate(`/movies/${data.id}`, { replace: true });
                 }
             }
-        }catch (error) {
+        } catch (error) {
             console.error('Error submitting movie:', error);
         }
     }
-
-    // Helper function to get default value for a field
-    const getDefaultValue = (fieldName) => {
-        if (!beingEdited || !editedMovieData) return '';
-        return editedMovieData[fieldName] || '';
-    };
 
     return (
         <div className={styles.movieAddOrEditPageWrapper}>
@@ -73,37 +138,45 @@ function MovieAddOrEdit({beingEdited = false}) {
 
                 <hr className="separator"/>
 
-                <form className="add-form" onSubmit={handleSubmit}>
+                <form className="add-form" noValidate onSubmit={handleSubmit}>
                     <div className="form-inputs-container">
                         {fields && fields.map(field => (
                             <div key={field.name} className={styles.formInputGroup}>
                                 {beingEdited ? <label htmlFor={field.name} className="text-main">{field.label}</label> : null}
                                 {field.type === 'textarea' ? (
-                                    <textarea
-                                        id={field.name}
-                                        name={field.name}
-                                        placeholder={field.label}
-                                        className={`form-input form-input-description ${styles.formInput || ''} ${styles.formInputDescription || ''}`.trim()}
-                                        required={field.required}
-                                        minLength={field.minLength}
-                                        maxLength={field.maxLength}
-                                        defaultValue={getDefaultValue(field.name)}
-                                    />
+                                    <>
+                                        {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
+                                        <textarea
+                                            id={field.name}
+                                            name={field.name}
+                                            placeholder={field.label}
+                                            className={`form-input form-input-description ${styles.formInput || ''} ${styles.formInputDescription || ''}`.trim()}
+                                            required={field.required}
+                                            minLength={field.minLength}
+                                            maxLength={field.maxLength}
+                                            value={formData[field.name] || ''}
+                                            onChange={onChange}
+                                        />
+                                    </>
                                 ) : (
-                                    <input
-                                        type={field.type}
-                                        id={field.name}
-                                        name={field.name}
-                                        placeholder={field.label}
-                                        className={`form-input ${styles.formInput || ''}`.trim()}
-                                        required={field.required}
-                                        minLength={field.minLength}
-                                        maxLength={field.maxLength}
-                                        min={field.min}
-                                        max={field.max}
-                                        pattern={field.pattern}
-                                        defaultValue={getDefaultValue(field.name)}
-                                    />
+                                    <>
+                                        {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
+                                        <input
+                                            type={field.type}
+                                            id={field.name}
+                                            name={field.name}
+                                            placeholder={field.label}
+                                            className={`form-input ${styles.formInput || ''}`.trim()}
+                                            required={field.required}
+                                            minLength={field.minLength}
+                                            maxLength={field.maxLength}
+                                            min={field.min}
+                                            max={field.max}
+                                            pattern={field.pattern}
+                                            value={formData[field.name] || ''}
+                                            onChange={onChange}
+                                        />
+                                    </>
                                 )}
                             </div>
                         ))}

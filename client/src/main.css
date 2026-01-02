@@ -513,7 +513,8 @@
     }
 
     .user-avatar-edit {
-        width: auto;
+        width: 300px;
+
         display: flex;
         flex-direction: column;
         gap: var(--space-m);
@@ -569,8 +570,14 @@
     }
 
     .user-labels-and-values {
-        display: flex;
+        display: grid;
+        grid-template-columns: auto 1fr;
         gap: var(--space-m);
+        align-items: stretch;
+    }
+
+    .user-labels-and-values h3 {
+        margin-bottom: var(--space-s);
     }
 
     .user-ratings h1 {
@@ -670,5 +677,13 @@
 
     .user-profile-buttons button {
         margin: 0;
+    }
+
+    .form-error {
+        color: red;
+    }
+
+    .form-error-brighter {
+        color: #ea4035
     }
 }

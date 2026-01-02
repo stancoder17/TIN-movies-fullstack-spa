@@ -8,6 +8,7 @@ import MovieCreateOrUpdate from "./components/movie-add/MovieAddOrEdit.jsx";
 import UserList from "./components/users/UserList.jsx";
 import UserDetails from "./components/user-details/UserDetails.jsx";
 import Ratings from "./components/ratings/Ratings.jsx";
+import Register from "./components/users/register/Register.jsx";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/movies/add" element={<MovieCreateOrUpdate beingEdited={false} />} />
                     <Route path="/movies/:id" element={<MovieDetails />} />
                     <Route path="/movies/:id/edit" element={<MovieCreateOrUpdate beingEdited={true} />} />
+                    <Route path="/register" element={<Register />} />
                     <Route path="/users" element={<UserList />} />
                     <Route path="/users/:id" element={<UserDetails beingEdited={false} />} />
                     <Route path="/users/:id/edit" element={<UserDetails beingEdited={true} />} />

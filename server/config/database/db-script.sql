@@ -5,11 +5,11 @@ DROP TABLE IF EXISTS movies;
 CREATE TABLE users
 (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-    nickname            VARCHAR(50)                        NOT NULL,
-    email               VARCHAR(100)                       NOT NULL UNIQUE,
-    password_hash       CHAR(64)                           NOT NULL,
-    profile_picture_url VARCHAR(255),
-    date_of_birth       DATE                               NOT NULL,
+    nickname            VARCHAR(50) NOT NULL,
+    email               VARCHAR(100) NOT NULL UNIQUE,
+    password_hash       CHAR(64) NOT NULL,
+    profile_picture_url VARCHAR(255) DEFAULT 'https://i.pinimg.com/474x/9e/83/75/9e837528f01cf3f42119c5aeeed1b336.jpg?nii=t' NOT NULL,
+    date_of_birth       DATE NOT NULL,
     date_of_joining     DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     bio                 TEXT
 );
@@ -18,11 +18,11 @@ CREATE TABLE movies
 (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     title        VARCHAR(255) NOT NULL,
-    description  TEXT         NOT NULL,
+    description  TEXT NOT NULL,
     genre        VARCHAR(100) NOT NULL,
     director     VARCHAR(100) NOT NULL,
-    release_date DATE         NOT NULL,
-    runtime      INT          NOT NULL,
+    release_date DATE NOT NULL,
+    runtime      INT NOT NULL,
     poster_url   VARCHAR(500) NOT NULL,
     youtube_html_url  VARCHAR(500) NOT NULL
 );
@@ -30,9 +30,9 @@ CREATE TABLE movies
 CREATE TABLE ratings
 (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id    INT                                NOT NULL,
-    movie_id   INT                                NOT NULL,
-    score      DECIMAL(3, 1)                      NOT NULL CHECK (score >= 1.0 AND score <= 10.0),
+    user_id    INT NOT NULL,
+    movie_id   INT NOT NULL,
+    score      DECIMAL(3, 1) NOT NULL CHECK (score >= 1.0 AND score <= 10.0),
     comment    TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     edited BOOL DEFAULT FALSE,

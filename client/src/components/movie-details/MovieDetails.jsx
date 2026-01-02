@@ -12,6 +12,7 @@ function MovieDetails() {
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [ratings, setRatings] = useState([]);
+    const [hasRating, setHasRating] = useState(false);
     const [averageScore, setAverageScore] = useState(null);
     const { id } = useParams();
 
@@ -26,6 +27,10 @@ function MovieDetails() {
             .then(data => {
                 setRatings(data);
                 setAverageScore(formatRatingScore(calculateAverageScore(data)));
+
+                if (data.some(rating => rating.user_id === 1)) { // TODO: Get user ID from auth context
+                    setHasRating(true);
+                }
             })
             .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
     }, [id]);
@@ -46,7 +51,7 @@ function MovieDetails() {
 
         const formData = new FormData(e.target);
         const ratingData = {
-            user_id: 3, // TODO: Get from auth context
+            user_id: 1, // TODO: Get from auth context
             movie_id: parseInt(id),
             score: parseFloat(formData.get('rating-score')),
             comment: formData.get('comment')
@@ -111,6 +116,7 @@ function MovieDetails() {
                 const newRatingsList = ratings.filter(r => r.id !== ratingId);
                 setRatings(newRatingsList);
                 setAverageScore(formatRatingScore(calculateAverageScore(newRatingsList)));
+                setHasRating(false);
             }
         } catch (error) {
             console.error('Error deleting rating:', error);
@@ -169,21 +175,23 @@ function MovieDetails() {
 
                     <RatingsList ratings={ratings} handleDelete={handleRatingDelete} handleUpdate={handleRatingUpdate} ItemComponent={RatingListItem} />
 
-                    <div className={`form-container ${styles.formContainer || ''}`.trim()}>
-                        <form className={`${styles.movieDetailsForm} ${ratingStyles.movieDetailsForm}`} onSubmit={handleRatingSubmit}>
-                            <textarea id="comment" name="comment" placeholder="Write a comment..."></textarea>
-                            <h2 className='text-main'>Rate:</h2>
-                            <div className={`media-rating ${styles.mediaRating || ''}`.trim()}>
-                                <h1>
-                                    <span className={`rating-stars ${styles.ratingStars || ''}`.trim()}>★</span>
-                                    <label htmlFor="rating-score"></label>
-                                    <input type="number" id="rating-score" name="rating-score" min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
-                                    <span className={`rating-scale ${styles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
-                                </h1>
-                            </div>
-                            <button type="submit">Post</button>
-                        </form>
-                    </div>
+                    {!hasRating && (
+                        <div className={`form-container ${styles.formContainer || ''}`.trim()}>
+                            <form className={`${styles.movieDetailsForm} ${ratingStyles.movieDetailsForm}`} onSubmit={handleRatingSubmit}>
+                                <textarea id="comment" name="comment" placeholder="Write a comment..." maxLength={ratingConstraints.comment.maxLength}></textarea>
+                                <h2 className='text-main'>Rate:</h2>
+                                <div className={`media-rating ${styles.mediaRating || ''}`.trim()}>
+                                    <h1>
+                                        <span className={`rating-stars ${styles.ratingStars || ''}`.trim()}>★</span>
+                                        <label htmlFor="rating-score"></label>
+                                        <input type="number" id="rating-score" name="rating-score" min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
+                                        <span className={`rating-scale ${styles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
+                                    </h1>
+                                </div>
+                                <button type="submit">Post</button>
+                            </form>
+                        </div>
+                    )}
                 </>
             )}
         </div>

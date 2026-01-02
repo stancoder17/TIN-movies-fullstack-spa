@@ -29,6 +29,10 @@ textarea {
     gap: var(--space-m);
 }
 
+.profileUrlInput {
+    width: 180px;
+}
+
 .userDetailsInput {
     background: var(--color-main-navy);
     color: var(--color-text);

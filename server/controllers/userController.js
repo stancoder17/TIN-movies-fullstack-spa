@@ -43,6 +43,16 @@ const getUpdateFormFields = async (req, res) => {
     }
 }
 
+const getRegisterFormFields = async (req, res) => {
+    try {
+        const result = await User.getRegisterFormFields();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while fetching user register form fields' });
+    }
+}
+
 const createUser = async (req, res) => {
     try {
         await User.create(req.body);
@@ -88,4 +98,4 @@ const deleteUser = async (req, res) => {
 }
 
 
-export { getAllUsers, getUserById, getUpdateFormFields, createUser, updateUser, deleteUser };
+export { getAllUsers, getUserById, getUpdateFormFields, getRegisterFormFields, createUser, updateUser, deleteUser };
