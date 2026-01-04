@@ -1,10 +1,25 @@
 import Rating from '../models/Rating.js';
 import {roundScore} from "../../utils/utils.js";
+import paginationConstraints from '../../utils/constraints/paginationConstraints.js';
 
 const getAllRatings = async (req, res) => {
     try {
-        const ratings = await Rating.getAll();
-        res.status(200).json(ratings);
+        const page = parseInt(req.query.page) || paginationConstraints.defaultPage;
+        const limit = parseInt(req.query.limit) || paginationConstraints.defaultLimit;
+
+        const offset = (page - 1) * limit;
+
+        const result = await Rating.getAll(limit, offset);
+        const { ratings, totalCount } = result;
+        const totalPages = Math.ceil(totalCount / limit);
+
+        res.status(200).json({
+            ratings: ratings,
+            totalCount: totalCount,
+            totalPages: totalPages,
+            currentPage: page,
+            limit: limit
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching ratings' });

@@ -1,9 +1,17 @@
 import User from '../models/User.js';
 import Rating from "../models/Rating.js";
+import paginationConstraints from '../../utils/constraints/paginationConstraints.js';
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.getAll();
+        const page = parseInt(req.query.page) || paginationConstraints.defaultPage;
+        const limit = parseInt(req.query.limit) || paginationConstraints.defaultLimit;
+
+        const offset = (page - 1) * limit;
+
+        const result = await User.getAll(limit, offset);
+        const { users, totalCount } = result;
+        const totalPages = Math.ceil(totalCount / limit);
 
         const usersWithRatings = await Promise.all(
             users.map(async user => {
@@ -15,7 +23,13 @@ const getAllUsers = async (req, res) => {
             })
         );
 
-        res.status(200).json(usersWithRatings);
+        res.status(200).json({
+            users: usersWithRatings,
+            totalCount: totalCount,
+            totalPages: totalPages,
+            currentPage: page,
+            limit: limit
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching users' });

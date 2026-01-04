@@ -1,8 +1,12 @@
 import db from '../config/database/db.js';
+import paginationConstraints from '../../utils/constraints/paginationConstraints.js';
 
 class Rating {
-    static async getAll() {
-        const sql = `
+    static defaultLimit = paginationConstraints.defaultLimit;
+    static defaultOffset = 0;
+
+    static async getAll(limit = this.defaultLimit, offset = this.defaultOffset) {
+        let sql = `
             SELECT
                 r.id,
                 r.user_id,
@@ -18,8 +22,26 @@ class Rating {
                      JOIN movies m ON r.movie_id = m.id
             ORDER BY r.created_at DESC
         `;
+        const params = [];
 
-        return await db.all(sql);
+        // Create count query before adding LIMIT and OFFSET
+        const countSql = `
+            SELECT COUNT(*) AS count FROM ratings r
+            JOIN users u ON r.user_id = u.id
+            JOIN movies m ON r.movie_id = m.id`
+
+        // Paging
+        sql += ' LIMIT ? OFFSET ?';
+        params.push(limit);
+        params.push(offset);
+
+        const ratings = await db.all(sql, params);
+        const countResult = await db.get(countSql);
+
+        return {
+            ratings: ratings,
+            totalCount: countResult.count
+        };
     }
 
     static async getById(id) {

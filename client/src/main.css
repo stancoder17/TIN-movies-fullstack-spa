@@ -600,7 +600,6 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: var(--space-m);
     }
 
     textarea {

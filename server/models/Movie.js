@@ -1,8 +1,9 @@
 import db from '../config/database/db.js';
 import movieConstraints from '../../utils/constraints/movieConstraints.js';
+import paginationConstraints from '../../utils/constraints/paginationConstraints.js';
 
 class Movie {
-    static defaultLimit = 10;
+    static defaultLimit = paginationConstraints.defaultLimit;
     static defaultOffset = 0;
 
     static async getAll(filters = {}, limit = this.defaultLimit, offset = this.defaultOffset) {

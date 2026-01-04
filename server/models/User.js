@@ -2,8 +2,12 @@ import db from '../config/database/db.js';
 import crypto from 'crypto';
 import userConstraints from '../../utils/constraints/userConstraints.js';
 import serverUserConstraints from '../config/constraints/userConstraints.js';
+import paginationConstraints from '../../utils/constraints/paginationConstraints.js';
 
 class User {
+    static defaultLimit = paginationConstraints.defaultLimit;
+    static defaultOffset = 0;
+
     static hashPassword(password) {
         return crypto.createHash('sha256')
             .update(password)
@@ -20,10 +24,25 @@ class User {
         }
     }
 
-    static async getAll() {
-        const sql = 'SELECT * FROM users';
+    static async getAll(limit = this.defaultLimit, offset = this.defaultOffset) {
+        let sql = 'SELECT * FROM users';
+        const params = [];
 
-        return await db.all(sql);
+         // Create count query before adding LIMIT and OFFSET
+        const countSql = sql.replace('SELECT *', 'SELECT COUNT(*) as count');
+
+        // Paging
+        sql += ' LIMIT ? OFFSET ?';
+        params.push(limit);
+        params.push(offset);
+
+        const users = await db.all(sql, params);
+        const countResult = await db.get(countSql);
+
+        return {
+            users: users,
+            totalCount: countResult.count
+        };
     }
 
     static async getById(id) {

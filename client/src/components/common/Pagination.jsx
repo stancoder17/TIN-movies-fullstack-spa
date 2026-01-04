@@ -14,9 +14,7 @@ class Pagination {
             if (!page) params.set('page', this.constraints.defaultPage);
             if (!limit) params.set('limit', this.constraints.defaultLimit);
             setSearchParams(params, { replace: true });
-            return false; // Indicates params were updated
         }
-        return true;
     }
 
     static changePage(newPage, searchParams, setSearchParams) {
