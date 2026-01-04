@@ -79,7 +79,7 @@ function MovieDetails() {
                 e.target.reset();
             } else {
                 const error = await response.json();
-                console.error('Error creating rating:', error.message);
+                alert(error.message);
             }
         } catch (error) {
             console.error('Error adding rating:', error);

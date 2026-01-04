@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
-function WelcomeUser() {
+function WelcomeUser({setLoggedIn}) {
     return (
         <div className="welcome-user">
-            <h2 className="text-main">Welcome, (USERNAME)</h2>
-            <Link to="/profile">
-                <img className="user-avatar user-avatar-small" src="https://i.pinimg.com/736x/ab/75/6b/ab756b17690cc6303a1c718257265b02.jpg" alt="User Menu"/>
+            <h2 className="text-main">Welcome, admin</h2>
+            <Link to="/users/1">
+                <img className="user-avatar user-avatar-small" src="https://cdn.pfps.gg/pfps/9319-lego-star-wars-31.png" alt="User Menu"/>
             </Link>
-            <Link to="/login">
+            <Link to="/register" onClick={() => setLoggedIn(false)}>
                 <h3 className="text-main-dark">LOG OUT</h3>
             </Link>
         </div>

@@ -9,11 +9,14 @@ import UserList from "./components/users/UserList.jsx";
 import UserDetails from "./components/user-details/UserDetails.jsx";
 import Ratings from "./components/ratings/Ratings.jsx";
 import Register from "./components/users/register/Register.jsx";
+import {useState} from "react";
 
 function App() {
+    const [loggedIn, setLoggedIn] = useState(true);
+
     return (
         <BrowserRouter>
-            <Header />
+            <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
             <main>
                 <Routes>
                     <Route path="/" element={<Navigate to="/movies" replace />} />
@@ -21,7 +24,7 @@ function App() {
                     <Route path="/movies/add" element={<MovieCreateOrUpdate beingEdited={false} />} />
                     <Route path="/movies/:id" element={<MovieDetails />} />
                     <Route path="/movies/:id/edit" element={<MovieCreateOrUpdate beingEdited={true} />} />
-                    <Route path="/register" element={<Register />} />
+                    <Route path="/register" element={<Register setLoggedIn={setLoggedIn}/>} />
                     <Route path="/users" element={<UserList />} />
                     <Route path="/users/:id" element={<UserDetails beingEdited={false} />} />
                     <Route path="/users/:id/edit" element={<UserDetails beingEdited={true} />} />

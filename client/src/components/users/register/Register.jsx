@@ -3,7 +3,7 @@ import styles from './Register.module.css';
 import {useNavigate} from "react-router-dom";
 import {validateNickname, validatePasswordPost, validateDateOfBirth, validateEmail} from "../../../utils/UserValidation.js";
 
-function Register() {
+function Register({setLoggedIn}) {
     const navigate = useNavigate();
     const [fields, setFields] = useState(null);
     const [errors, setErrors] = useState({});
@@ -71,6 +71,7 @@ function Register() {
             });
 
             if (response.ok) {
+                setLoggedIn(true);
                 navigate('/movies', {replace: true});
             } else {
                 const error = await response.json();

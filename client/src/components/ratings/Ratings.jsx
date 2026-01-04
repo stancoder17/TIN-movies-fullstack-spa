@@ -63,12 +63,7 @@ function Ratings() {
                                     <td className="text-main">{formatDate(rating.created_at)}</td>
                                     <td>
                                         <div className="action-buttons">
-                                            <button
-                                                className="table-btn btn-red"
-                                                onClick={() => handleDelete(rating.id)}
-                                            >
-                                                Delete
-                                            </button>
+                                            <button className="table-btn btn-red" onClick={() => handleDelete(rating.id)}>Delete</button>
                                         </div>
                                     </td>
                                 </tr>
