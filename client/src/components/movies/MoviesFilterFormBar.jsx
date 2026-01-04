@@ -1,11 +1,10 @@
 import {useState} from "react";
 import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 import DateRangeSliderInput from "./DateRangeSliderInput.jsx";
 import styles from './MoviesPage.module.css';
+import { Pagination } from '../common/Pagination.jsx';
 
-function MoviesFilterFormBar() {
-    const navigate = useNavigate();
+function MoviesFilterFormBar({searchParams, setSearchParams})  {
     const [fields, setFields] = useState({
         genres: [],
         minDate: null,
@@ -30,26 +29,29 @@ function MoviesFilterFormBar() {
         const minDate = formData.get('minDate');
         const maxDate = formData.get('maxDate');
 
-        // Build query string and navigate to new URL
-        const params = new URLSearchParams();
+        const currentParams = new URLSearchParams(searchParams);
+
+        // Delete previous parameters (except page and limit)
+        currentParams.delete('genres');
+        currentParams.delete('minDate');
+        currentParams.delete('maxDate');
 
         // Example: genres=action&genres=comedy...
         if (genres.length > 0) {
-            genres.forEach(genre => params.append('genres', genre));
-        } else {
-            params.append('genres', null);
+            genres.forEach(genre => currentParams.append('genres', genre));
         }
 
         if (minDate) {
-            params.append('minDate', minDate);
+            currentParams.append('minDate', minDate);
         }
 
         if (maxDate) {
-            params.append('maxDate', maxDate);
+            currentParams.append('maxDate', maxDate);
         }
 
-        // Navigate to URL with query params
-        navigate(`/movies?${params.toString()}`);
+        currentParams.set('page', Pagination.constraints.defaultPage.toString()); // reset to the first page on new filter
+
+        setSearchParams(currentParams);
     }
 
     return (

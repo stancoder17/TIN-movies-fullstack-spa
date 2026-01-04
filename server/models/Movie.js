@@ -2,11 +2,15 @@ import db from '../config/database/db.js';
 import movieConstraints from '../../utils/constraints/movieConstraints.js';
 
 class Movie {
-    static async getAll(filters = {}) {
+    static defaultLimit = 10;
+    static defaultOffset = 0;
+
+    static async getAll(filters = {}, limit = this.defaultLimit, offset = this.defaultOffset) {
         let sql = 'SELECT * FROM movies';
-        const hasAnyFilter = Object.values(filters).some(value => value !== undefined);
         const params = [];
 
+        // Filtering
+        const hasAnyFilter = Object.values(filters).some(value => value !== undefined);
         if (hasAnyFilter) {
             sql += ' WHERE ';
             let hasFiltersApplied = false;
@@ -26,9 +30,24 @@ class Movie {
                 params.push(filters.minDate.toString());
                 params.push(filters.maxDate.toString());
             }
+
         }
 
-        return await db.all(sql, params);
+        // Create count query before adding LIMIT and OFFSET
+        const countSql = sql.replace('SELECT *', 'SELECT COUNT(*) as count');
+
+        // Paging
+        sql += ' LIMIT ? OFFSET ?';
+        params.push(limit);
+        params.push(offset);
+
+        const movies = await db.all(sql, params);
+        const countResult = await db.get(countSql, params.slice(0, -2)); // without limit and offset params
+
+        return {
+            movies: movies,
+            totalCount: countResult.count
+        };
     }
 
     static async getById(id) {

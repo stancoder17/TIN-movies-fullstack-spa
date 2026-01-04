@@ -1,35 +1,45 @@
 import {useEffect, useState} from "react";
-import {useSearchParams} from "react-router-dom";
 import MovieListItem from "./MovieListItem.jsx";
+import {Pagination, PageSelector} from "../common/Pagination.jsx";
 
-function MovieList() {
+function MovieList({searchParams, setSearchParams}) {
     const [movies, setMovies] = useState([]);
-    const [searchParams] = useSearchParams();
+    const [currentPage, setCurrentPage] = useState(Pagination.constraints.defaultPage);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        let fetchLink = "http://localhost:5000/api/movies";
+        Pagination.init(searchParams, setSearchParams);
 
-        // Use URL search params directly
-        const queryString = searchParams.toString();
-        if (queryString) {
-            fetchLink += `?${queryString}`;
-        }
-
-        fetch(fetchLink)
+        fetch(`http://localhost:5000/api/movies?${searchParams.toString()}`)
             .then(response => response.json())
             .then(data => {
-                setMovies(data);
+                setMovies(data.movies);
+                setTotalPages(data.totalPages);
+                setCurrentPage(data.currentPage);
             })
             .catch(error => {
                 console.error("Error fetching movies:", error);
             });
-    }, [searchParams])
+    }, [searchParams]);
+
+    const handlePageSelect = (e) => {
+        Pagination.changePage(e.target.value, searchParams, setSearchParams);
+    }
 
     return (
         <>
-            {movies.length > 0 ? movies.map((movie) => (
-                <MovieListItem key={movie.id} movie={movie} />
-            )) : (
+            {movies && movies.length > 0 ? (
+                <>
+                    {movies.map((movie) => (
+                        <MovieListItem key={movie.id} movie={movie} />
+                    ))}
+                    <PageSelector
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageSelect}
+                    />
+                </>
+            ) : (
                 <p className="text-main">No movies found.</p>
             )}
         </>

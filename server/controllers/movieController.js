@@ -4,6 +4,10 @@ import { calculateAverageScore } from '../../utils/utils.js';
 
 const getAllMovies = async (req, res) => {
     try {
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const offset = (page - 1) * limit;
+
         // Get filters from query params ('undefined' if not provided)
         const filters = {};
 
@@ -21,8 +25,11 @@ const getAllMovies = async (req, res) => {
             filters.maxDate = req.query.maxDate;
         }
 
-        const movies = await Movie.getAll(filters);
+        const result = await Movie.getAll(filters, limit, offset);
+        const { movies, totalCount } = result;
+        const totalPages = Math.ceil(totalCount / limit);
 
+        // For each movie, get its ratings and calculate average score
         const moviesWithRatings = await Promise.all(
             movies.map(async movie => {
                 const ratings = await Rating.getByMovieId(movie.id);
@@ -37,7 +44,12 @@ const getAllMovies = async (req, res) => {
             })
         );
 
-        res.status(200).json(moviesWithRatings);
+        res.status(200).json({
+            movies: moviesWithRatings,
+            totalPages: totalPages,
+            currentPage: page,
+            limit: limit
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching movies' });
