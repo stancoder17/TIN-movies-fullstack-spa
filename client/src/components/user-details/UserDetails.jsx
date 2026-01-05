@@ -32,21 +32,31 @@ function UserDetails({ beingEdited }) {
 
     useEffect(() => {
         fetch(`http://localhost:5000/api/users/${id}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        setUser(null);
+                        return null;
+                    }
+                }
+                return response.json();
+            })
             .then(data => {
-                setUser(data);
-                if (beingEdited) {
-                    setFormData({
-                        nickname: data.nickname || '',
-                        email: data.email || '',
-                        password: '',
-                        profile_picture_url: data.profile_picture_url || '',
-                        date_of_birth: data.date_of_birth || '',
-                        bio: data.bio || ''
-                    });
+                if (data) {
+                    setUser(data);
+                    if (beingEdited) {
+                        setFormData({
+                            nickname: data.nickname || '',
+                            email: data.email || '',
+                            password: '',
+                            profile_picture_url: data.profile_picture_url || '',
+                            date_of_birth: data.date_of_birth || '',
+                            bio: data.bio || ''
+                        });
+                    }
                 }
             })
-            .catch(error => console.error(`Error fetching user details for ID ${id}:`, error));
+            .catch(error => { console.error(`Error fetching user details for ID ${id}:`, error); });
 
         if (!beingEdited) {
             fetch(`http://localhost:5000/api/users/${id}/ratings`)
@@ -184,7 +194,7 @@ function UserDetails({ beingEdited }) {
     return (
         <div className={styles.userDetailsWrapper}>
             <div className={`main-content ${styles.mainContent || ''}`.trim()}>
-                {user && (
+                {user ? (
                     <>
                         {beingEdited && fields ? (
                             <form className={`user-profile-header ${editStyles.userEditForm}`} noValidate onSubmit={handleSubmit}>
@@ -320,6 +330,8 @@ function UserDetails({ beingEdited }) {
                             </>
                         )}
                     </>
+                ) : (
+                    <p className="text-main">404 not found.</p>
                 )}
             </div>
         </div>

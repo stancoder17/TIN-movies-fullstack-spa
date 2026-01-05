@@ -18,8 +18,20 @@ function MovieDetails() {
 
     useEffect(() => {
         fetch("http://localhost:5000/api/movies/" + id)
-            .then(response => response.json())
-            .then(data => setMovie(data))
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        setMovie(null);
+                        return null;
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    setMovie(data);
+                }
+            })
             .catch(error => console.error(`Error fetching movie details for ID ${id}:`, error));
 
         fetch(`http://localhost:5000/api/movies/${id}/ratings`)
@@ -77,9 +89,10 @@ function MovieDetails() {
 
                 // Clear form
                 e.target.reset();
+                setHasRating(true);
             } else {
                 const error = await response.json();
-                alert(error.message);
+                console.error(error.message);
             }
         } catch (error) {
             console.error('Error adding rating:', error);
@@ -126,7 +139,7 @@ function MovieDetails() {
     return (
         <div className={styles.movieDetailsPageWrapper}>
             <div className={`main-content ${styles.mainContent || ''}`.trim()}>
-                {movie && (
+                {movie ? (
                 <>
                     <div className="details-header">
                         <div className="title-and-details">
@@ -184,7 +197,7 @@ function MovieDetails() {
                                     <h1>
                                         <span className={`rating-stars ${styles.ratingStars || ''}`.trim()}>★</span>
                                         <label htmlFor="rating-score"></label>
-                                        <input type="number" id="rating-score" name="rating-score" min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
+                                        <input type="number" id="rating-score" name="rating-score" required min={ratingConstraints.score.min} max={ratingConstraints.score.max} step={ratingConstraints.score.increment}/>
                                         <span className={`rating-scale ${styles.ratingScale || ''}`.trim()}>/{ratingConstraints.score.max}</span>
                                     </h1>
                                 </div>
@@ -193,7 +206,9 @@ function MovieDetails() {
                         </div>
                     )}
                 </>
-            )}
+                ) : (
+                    <p className="text-main">404 not found.</p>
+                )}
         </div>
         </div>
     )

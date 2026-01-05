@@ -18,6 +18,7 @@ function MovieAddOrEdit({beingEdited = false}) {
     const {id} = useParams();
     const [fields, setFields] = useState(null);
     const [errors, setErrors] = useState({});
+    const [movieFound, setMovieFound] = useState(true);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -45,18 +46,28 @@ function MovieAddOrEdit({beingEdited = false}) {
 
         if (beingEdited && id) {
             fetch(`http://localhost:5000/api/movies/${id}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            setMovieFound(false);
+                            return null;
+                        }
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    setFormData({
-                        title: data.title || '',
-                        description: data.description || '',
-                        genre: data.genre || '',
-                        director: data.director || '',
-                        release_date: data.release_date || '',
-                        runtime: data.runtime || '',
-                        poster_url: data.poster_url || '',
-                        youtube_html_url: data.youtube_html_url || ''
-                    });
+                    if (data) {
+                        setFormData({
+                            title: data.title || '',
+                            description: data.description || '',
+                            genre: data.genre || '',
+                            director: data.director || '',
+                            release_date: data.release_date || '',
+                            runtime: data.runtime || '',
+                            poster_url: data.poster_url || '',
+                            youtube_html_url: data.youtube_html_url || ''
+                        });
+                    }
                 })
                 .catch(error => console.error('Error fetching movie data:', error));
         }
@@ -133,62 +144,65 @@ function MovieAddOrEdit({beingEdited = false}) {
     return (
         <div className={styles.movieAddOrEditPageWrapper}>
             <div className={`main-content ${styles.mainContent || ''}`.trim()}>
-                <div className={`form-container ${styles.formContainer || ''}`.trim()}>
-                <h1 className="text-main">{title}</h1>
+                {(!beingEdited || movieFound) ? (
+                    <div className={`form-container ${styles.formContainer || ''}`.trim()}>
+                        <h1 className="text-main">{title}</h1>
 
-                <hr className="separator"/>
+                        <hr className="separator"/>
 
-                <form className="add-form" noValidate onSubmit={handleSubmit}>
-                    <div className="form-inputs-container">
-                        {fields && fields.map(field => (
-                            <div key={field.name} className={styles.formInputGroup}>
-                                {beingEdited ? <label htmlFor={field.name} className="text-main">{field.label}</label> : null}
-                                {field.type === 'textarea' ? (
-                                    <>
-                                        {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
-                                        <textarea
-                                            id={field.name}
-                                            name={field.name}
-                                            placeholder={field.label}
-                                            className={`form-input form-input-description ${styles.formInput || ''} ${styles.formInputDescription || ''}`.trim()}
-                                            required={field.required}
-                                            minLength={field.minLength}
-                                            maxLength={field.maxLength}
-                                            value={formData[field.name] || ''}
-                                            onChange={onChange}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
-                                        <input
-                                            type={field.type}
-                                            id={field.name}
-                                            name={field.name}
-                                            placeholder={field.label}
-                                            className={`form-input ${styles.formInput || ''}`.trim()}
-                                            required={field.required}
-                                            minLength={field.minLength}
-                                            maxLength={field.maxLength}
-                                            min={field.min}
-                                            max={field.max}
-                                            pattern={field.pattern}
-                                            value={formData[field.name] || ''}
-                                            onChange={onChange}
-                                        />
-                                    </>
-                                )}
+                        <form className="add-form" noValidate onSubmit={handleSubmit}>
+                            <div className="form-inputs-container">
+                                {fields && fields.map(field => (
+                                    <div key={field.name} className={styles.formInputGroup}>
+                                        {beingEdited ? <label htmlFor={field.name} className="text-main">{field.label}</label> : null}
+                                        {field.type === 'textarea' ? (
+                                            <>
+                                                {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
+                                                <textarea
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    placeholder={field.label}
+                                                    className={`form-input form-input-description ${styles.formInput || ''} ${styles.formInputDescription || ''}`.trim()}
+                                                    required={field.required}
+                                                    minLength={field.minLength}
+                                                    maxLength={field.maxLength}
+                                                    value={formData[field.name] || ''}
+                                                    onChange={onChange}
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                {errors[field.name] && <span className="form-error-brighter">{errors[field.name]}</span>}
+                                                <input
+                                                    type={field.type}
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    placeholder={field.label}
+                                                    className={`form-input ${styles.formInput || ''}`.trim()}
+                                                    required={field.required}
+                                                    minLength={field.minLength}
+                                                    maxLength={field.maxLength}
+                                                    min={field.min}
+                                                    max={field.max}
+                                                    pattern={field.pattern}
+                                                    value={formData[field.name] || ''}
+                                                    onChange={onChange}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
 
-                    <div className={`form-buttons-etc ${styles.formButtonsEtc || ''}`.trim()}>
-                        <button type="submit" className={`btn-blue wide ${styles.wide || ''}`.trim()}>{submitLabel}</button>
+                            <div className={`form-buttons-etc ${styles.formButtonsEtc || ''}`.trim()}>
+                                <button type="submit" className={`btn-blue wide ${styles.wide || ''}`.trim()}>{submitLabel}</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                ) : (
+                    <p className="text-main">404 not found.</p>
+                )}
             </div>
-
-        </div>
         </div>
     )
 }
