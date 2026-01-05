@@ -34,18 +34,21 @@ function MovieDetails() {
             })
             .catch(error => console.error(`Error fetching movie details for ID ${id}:`, error));
 
-        fetch(`http://localhost:5000/api/movies/${id}/ratings`)
-            .then(response => response.json())
-            .then(data => {
-                setRatings(data);
-                setAverageScore(formatRatingScore(calculateAverageScore(data)));
+        if (movie) {
+            fetch(`http://localhost:5000/api/movies/${id}/ratings`)
+                .then(response => response.json())
+                .then(data => {
+                    setRatings(data);
+                    setAverageScore(formatRatingScore(calculateAverageScore(data)));
 
-                if (data.some(rating => rating.user_id === 1)) { // TODO: Get user ID from auth context
-                    setHasRating(true);
-                }
-            })
-            .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
+                    if (data.some(rating => rating.user_id === 1)) { // TODO: Get user ID from auth context
+                        setHasRating(true);
+                    }
+                })
+                .catch(error => console.error(`Error fetching ratings for movie ID ${id}:`, error));
+        }
     }, [id]);
+
 
     const handleMovieDelete = async () => {
         const response = await fetch(`http://localhost:5000/api/movies/${id}`, {
