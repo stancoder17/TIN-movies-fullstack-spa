@@ -5,6 +5,8 @@ class Pagination {
         defaultLimit: 10
     };
 
+    /* Function used to during user's first visit to the url to initialize
+       the search parameters with default values, because they are missing */
     static init(searchParams, setSearchParams) {
         const page = parseInt(searchParams.get('page'));
         const limit = parseInt(searchParams.get('limit'));
@@ -14,7 +16,9 @@ class Pagination {
             if (!page) params.set('page', this.constraints.defaultPage);
             if (!limit) params.set('limit', this.constraints.defaultLimit);
             setSearchParams(params, { replace: true });
+            return true; // indicates that search parameters were updated
         }
+        return false; // no update needed
     }
 
     static changePage(newPage, searchParams, setSearchParams) {

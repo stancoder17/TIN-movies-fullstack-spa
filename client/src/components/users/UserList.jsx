@@ -11,17 +11,19 @@ function UserList() {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        // Initialize pagination parameters if missing
-        Pagination.init(searchParams, setSearchParams);
+        const paramsUpdated = Pagination.init(searchParams, setSearchParams);
 
-        fetch(`http://localhost:5000/api/users?${searchParams.toString()}`)
-            .then(response => response.json())
-            .then(data => {
-                setUsers(data.users);
-                setTotalPages(data.totalPages);
-                setCurrentPage(data.currentPage);
-            })
-            .catch(error => console.error("Error fetching users:", error));
+        // Don't fetch data before parameters are initialized to avoid redundant requests
+        if (!paramsUpdated) {
+            fetch(`http://localhost:5000/api/users?${searchParams.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    setUsers(data.users);
+                    setTotalPages(data.totalPages);
+                    setCurrentPage(data.currentPage);
+                })
+                .catch(error => console.error("Error fetching users:", error));
+        }
     }, [searchParams]);
 
     const handleDelete = async (userId) => {

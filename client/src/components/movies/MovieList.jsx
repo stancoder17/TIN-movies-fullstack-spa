@@ -8,18 +8,21 @@ function MovieList({searchParams, setSearchParams}) {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        Pagination.init(searchParams, setSearchParams);
+        const paramsUpdated = Pagination.init(searchParams, setSearchParams);
 
-        fetch(`http://localhost:5000/api/movies?${searchParams.toString()}`)
-            .then(response => response.json())
-            .then(data => {
-                setMovies(data.movies);
-                setTotalPages(data.totalPages);
-                setCurrentPage(data.currentPage);
-            })
-            .catch(error => {
-                console.error("Error fetching movies:", error);
-            });
+        // Don't fetch data before parameters are initialized to avoid redundant requests
+        if (!paramsUpdated) {
+            fetch(`http://localhost:5000/api/movies?${searchParams.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    setMovies(data.movies);
+                    setTotalPages(data.totalPages);
+                    setCurrentPage(data.currentPage);
+                })
+                .catch(error => {
+                    console.error("Error fetching movies:", error);
+                });
+        }
     }, [searchParams]);
 
     const handlePageSelect = (e) => {

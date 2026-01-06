@@ -11,16 +11,19 @@ function Ratings() {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        Pagination.init(searchParams, setSearchParams);
+        const paramsUpdated = Pagination.init(searchParams, setSearchParams);
 
-        fetch(`http://localhost:5000/api/ratings?${searchParams.toString()}`)
-            .then(response => response.json())
-            .then(data => {
-                setRatings(data.ratings);
-                setTotalPages(data.totalPages);
-                setCurrentPage(data.currentPage);
-            })
-            .catch(error => console.error('Error fetching ratings:', error));
+        // Don't fetch data before parameters are initialized to avoid redundant requests
+        if (!paramsUpdated) {
+            fetch(`http://localhost:5000/api/ratings?${searchParams.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    setRatings(data.ratings);
+                    setTotalPages(data.totalPages);
+                    setCurrentPage(data.currentPage);
+                })
+                .catch(error => console.error('Error fetching ratings:', error));
+        }
     }, [searchParams]);
 
     const handleDelete = async (id) => {

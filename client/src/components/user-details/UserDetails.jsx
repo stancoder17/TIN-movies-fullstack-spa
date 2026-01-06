@@ -58,22 +58,20 @@ function UserDetails({ beingEdited }) {
             })
             .catch(error => { console.error(`Error fetching user details for ID ${id}:`, error); });
 
-        if (user) {
-            if (!beingEdited) {
-                fetch(`http://localhost:5000/api/users/${id}/ratings`)
-                    .then(response => response.json())
-                    .then(data => setRatings(data))
-                    .catch(error => console.error(`Error fetching ratings for user ID ${id}:`, error));
-            } else {
-                fetch('http://localhost:5000/api/users/update-form-fields')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Make fields available by 'name' property. Example: fields.nickname.label
-                        const config = Object.fromEntries(data.map(field => [field.name, field]));
-                        setFields(config);
-                    })
-                    .catch(error => console.error('Error fetching user form fields:', error));
-            }
+        if (!beingEdited) {
+            fetch(`http://localhost:5000/api/users/${id}/ratings`)
+                .then(response => response.json())
+                .then(data => setRatings(data))
+                .catch(error => console.error(`Error fetching ratings for user ID ${id}:`, error));
+        } else {
+            fetch('http://localhost:5000/api/users/update-form-fields')
+                .then(response => response.json())
+                .then(data => {
+                    // Make fields available by 'name' property. Example: fields.nickname.label
+                    const config = Object.fromEntries(data.map(field => [field.name, field]));
+                    setFields(config);
+                })
+                .catch(error => console.error('Error fetching user form fields:', error));
         }
     }, [id, beingEdited]);
 
